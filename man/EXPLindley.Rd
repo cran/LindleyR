@@ -6,10 +6,11 @@
 \alias{hexplindley}
 \alias{pexplindley}
 \alias{qexplindley}
+\alias{relieftimes}
 \alias{rexplindley}
 \title{Exponentiated Lindley Distribution}
 \source{
-[dpqh]explindley are calculated directly from the definitions. \code{rexplindley} uses the inverse transform method.
+[d-h-p-q-r]explindley are calculated directly from the definitions. \code{rexplindley} uses the quantile function.
 }
 \usage{
 dexplindley(x, theta, alpha, log = FALSE)
@@ -27,9 +28,9 @@ hexplindley(x, theta, alpha, log = FALSE)
 
 \item{theta, alpha}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
@@ -41,7 +42,7 @@ hexplindley(x, theta, alpha, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the exponentiated Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the exponentiated Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function
@@ -51,14 +52,16 @@ Cumulative distribution function
 \deqn{F(x\mid \theta,\alpha )=\left[ 1-\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}\right] ^{\alpha }}
 
 Quantile function
-\deqn{Q(p\mid \theta,\alpha )=-1-\frac{1}{\theta }-{\frac{1}{\theta }}W_{-1}{\left( \left( 1+\theta \right) \left( p^{-\alpha }-1\right) e{^{-1-\theta }}\right) }}
+\deqn{Q(p\mid \theta ,\alpha )=-1-\frac{1}{\theta }-{\frac{1}{\theta }}W_{-1}{\left( (p^{\frac{1}{\alpha }}-1)\left( 1+\theta \right) e{^{-\left( 1+\theta \right) }}\right) }}
 
 Hazard rate function
-\deqn{h(x\mid \theta,\alpha )={\frac{\alpha {\theta }^{2}\left( 1+x\right) {{e}^{-\theta x}}\left[ 1-\left( 1+{\frac{\theta ,}{1+\theta }}\right) e{^{-\theta x}}\right] ^{\alpha -1}}{\left( 1+\theta \right) \left\{ 1-\left[\left( 1-\left( 1+{\frac{\theta ,}{1+\theta }}\right) {{e}^{-\theta x}}\right) ^{\alpha }\right] \right\} }}}
-
+\deqn{h(x\mid \theta ,\alpha )={\frac{\alpha {\theta }^{2}\left( 1+x\right) {{e}^{-\theta x}}\left[ 1-\left( 1+{\frac{\theta x}{1+\theta }}\right) e{^{-\theta x}}\right] ^{\alpha -1}}{\left( 1+\theta \right) \left\{ 1-\left[ 1-\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}\right] ^{\alpha}\right\} }}}
 where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 
 \bold{Particular case:} \eqn{\alpha = 1} the one-parameter Lindley distribution.
+}
+\note{
+Nadarajah et al. (2011) named the exponentiated Lindley distribution as generalized Lindley distribution.
 }
 \examples{
 set.seed(1)
@@ -75,8 +78,10 @@ pexplindley(q, theta = 1.5, alpha = 1.5, lower.tail = FALSE)
 qexplindley(p, theta = 1.5, alpha = 1.5, lower.tail = TRUE)
 qexplindley(p, theta = 1.5, alpha = 1.5, lower.tail = FALSE)
 
+## Relief times data (from Nadarajah et al., 2011)
+data(relieftimes)
 library(fitdistrplus)
-fit <- fitdist(x, 'explindley', start = list(theta = 1.5, alpha = 1.5))
+fit <- fitdist(relieftimes, 'explindley', start = list(theta = 1.5, alpha = 1.5))
 plot(fit)
 
 }
@@ -89,6 +94,6 @@ Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 Nadarajah, S., Bakouch, H. S., Tahmasbi, R., (2011). A generalized Lindley distribution. \emph{Sankhya B}, \bold{73}, (2), 331-359.
 }
 \seealso{
-\code{\link[LambertW]{W}}.
+\code{\link[lamW]{lambertWm1}}.
 }
 

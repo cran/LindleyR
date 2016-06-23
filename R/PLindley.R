@@ -1,11 +1,11 @@
-#' @importFrom LambertW W
+#' @importFrom lamW lambertWm1
 #'
 #' @name PLindley
-#' @aliases PLindley dplindley pplindley qplindley rplindley hplindley
+#' @aliases PLindley dplindley pplindley qplindley rplindley hplindley carbonfibres
 #'
 #' @title Power Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the power Lindley distribution with parameters theta and alpha.
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the power Lindley distribution with parameters theta and alpha.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
@@ -20,35 +20,35 @@
 #' @param p vector of probabilities.
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
 #' @param theta,alpha positive parameters.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
-#' @param mixture logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
+#' @param mixture logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.
 #'
 #' @return \code{dplindley} gives the density, \code{pplindley} gives the distribution function, \code{qplindley} gives the quantile function, \code{rplindley} generates random deviates and \code{hplindley} gives the hazard rate function.
 #' @return Invalid arguments will return an error message.
 #
-#' @seealso  \code{\link[LambertW]{W}}.
+#' @seealso  \code{\link[lamW]{lambertWm1}}, \code{\link[LindleyR]{DPLindley}}.
 #'
-#' @source [dpqh]plindley are calculated directly from the definitions. \code{rplindley} uses either a two-component mixture of gamma distributions or the inverse transform method.
+#' @source [d-h-p-q-r]plindley are calculated directly from the definitions. \code{rplindley} uses either a two-component mixture of gamma distributions or the quantile function.
 #'
 #' @details
 #' Probability density function
 #' \deqn{f(x\mid \theta,\alpha )={\frac{\alpha \theta ^{2}}{1 + \theta}}(1+x^{\alpha})\ x^{\alpha -1}\ e^{-\theta x^{\alpha }}}
 #'
 #' Cumulative distribution function
-#' \deqn{F(x\mid \theta,\alpha )=1-\left( 1+{\frac{\theta x^{\alpha }}{1 + \theta}}\right) \ e^{-\theta x^{\alpha }}}
+#' \deqn{F(x\mid \theta,\alpha )=1-\left( 1+{\frac{\theta }{1 + \theta}}x^{\alpha }\right) \ e^{-\theta x^{\alpha }}}
 #'
 #' Quantile function
-#' \deqn{Q(p\mid \theta,\alpha )=\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( \left( 1+\theta \right) \left(p-1\right) e^{-1-\theta }\right) \right) ^{-\frac{1}{\alpha }}}
+#' \deqn{Q(p\mid \theta,\alpha )=\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( \left( 1+\theta \right) \left(p-1\right) e^{-(1+\theta) }\right) \right) ^{\frac{1}{\alpha }}}
 #'
 #' Hazard rate function
-#' \deqn{h(x\mid\alpha,\beta )={\frac{\alpha \theta ^{2}(1+x^{\alpha })x^{\alpha-1}e^{-\theta x^{\alpha }}}{\left( \theta +1\right) \left( 1+{\frac{\theta x^{\alpha }}{1 + \theta}}\right) }}}
+#' \deqn{h(x\mid \theta ,\alpha )={\frac{\alpha \theta ^{2}(1+x^{\alpha })x^{\alpha-1}}{\left( \theta +1\right) \left( 1+{\frac{\theta }{\theta +1}}x^{\alpha }\right) }} }
 #'
 #' where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 #'
 #' \bold{Particular case:} \eqn{\alpha = 1} the one-parameter Lindley distribution.
 #'
-#' @examples 
+#' @examples
 #' set.seed(1)
 #' x <- rplindley(n = 1000, theta = 1.5, alpha = 1.5, mixture = TRUE)
 #' R <- range(x)
@@ -63,10 +63,11 @@
 #' qplindley(p, theta = 1.5, alpha = 1.5, lower.tail = TRUE)
 #' qplindley(p, theta = 1.5, alpha = 1.5, lower.tail = FALSE)
 #'
+#' ## carbon fibers data (from Ghitany et al., 2013)
+#' data(carbonfibers)
 #' library(fitdistrplus)
-#' fit <- fitdist(x, 'plindley', start = list(theta = 1.5, alpha = 1.5))
+#' fit <- fitdist(carbonfibers, 'plindley', start = list(theta = 0.1, alpha = 0.1))
 #' plot(fit)
-#'
 #'
 #' @rdname PLindley
 #' @export
@@ -102,15 +103,15 @@ pplindley <- function(q, theta, alpha, lower.tail = TRUE, log.p = FALSE)
   {
     t4 <- q ^ alpha
     t8 <- exp(-theta * t4)
-    O  <- 1 - (1 + theta / (1 + theta) * t4) * t8
+    cdf<- 1 - (1 + theta / (1 + theta) * t4) * t8
   }
   else
   {
     t4 <- q ^ alpha
     t8 <- exp(-theta * t4)
-    O  <- (1 + theta / (1 + theta) * t4) * t8
+    cdf<- (1 + theta / (1 + theta) * t4) * t8
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 #' @rdname PLindley
@@ -120,25 +121,25 @@ qplindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE)
   stopifnot(theta > 0, alpha > 0)
   if(lower.tail)
   {
-    t1 <- 0.1e1 / alpha
-    t2 <- theta ^ t1
-    t4 <- 1 + theta
-    t7 <- exp(-t4)
-    t9 <- W(t4 * (p - 1) * t7, branch = -1)
+    t1  <- 0.1e1 / alpha
+    t2  <- theta ^ t1
+    t4  <- 0.1e1 + theta
+    t7  <- exp(-t4)
+    t9  <- lambertWm1(t4 * (p - 0.1e1) * t7)
     t11 <- (-t9 - 1 - theta) ^ t1
-    O   <- 1 / t2 * t11
+    qtf <- 0.1e1 / t2 * t11
   }
   else
   {
-    t1 <- 0.1e1 / alpha
-    t2 <- theta ^ t1
-    t4 <- 1 + theta
-    t6 <- exp(-t4)
-    t8 <- W(-p * t4 * t6, branch = -1)
-    t10 <- (-t8 - 1 - theta) ^ t1
-    O   <- 1 / t2 * t10
+    t1  <- 0.1e1 / alpha
+    t2  <- theta ^ t1
+    t4  <- 1 + theta
+    t6  <- exp(-t4)
+    t8  <- lambertWm1(-p * t4 * t6)
+    t10 <- (-t8 - 0.1e1 - theta) ^ t1
+    qtf <- 0.1e1 / t2 * t10
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(qtf)) else return(qtf)
 }
 
 #' @rdname PLindley
@@ -148,8 +149,7 @@ rplindley <- function(n, theta, alpha, mixture = TRUE)
   stopifnot(theta > 0, alpha > 0)
   if(mixture)
   {
-    p <- rbinom(n, size = 1, prob = theta / (1 + theta))
-    (p * rgamma(n, shape = 1, rate = theta) + (1 - p) * rgamma(n, shape = 2, rate = theta)) ^ (1 / alpha)
+    rlindley(n, theta, mixture = TRUE) ^ (1 / alpha)
   }
   else
   {
@@ -183,5 +183,4 @@ hplindley <- function(x, theta, alpha, log = FALSE)
     alpha * t1 * t4 * (1 + t6) * t9 / (theta * t4 * t6 + 1)
   }
 }
-#' @in
 

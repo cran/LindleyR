@@ -1,34 +1,34 @@
-#' @importFrom LambertW W
+#' @importFrom lamW lambertWm1
 #'
 #' @name QLindley
 #' @aliases QLindley dqlindley pqlindley qqlindley rqlindley hqlindley
 #'
 #' @title Quasi Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the quasi Lindley distribution with parameters theta and alpha.
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the quasi Lindley distribution with parameters theta and alpha.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 #'
 #' @references
 #'
-#' Shanker, R. and Mishra, A. (2013). A quasi Lindley distribution. \emph{African Journal of Mathematics and Computer Science Research},  \bold{6}, (4), 64-71.
+#' Shanker, R. and Mishra, A. (2013). A quasi Lindley distribution. \emph{African Journal of Mathematics and Computer Science Research}, \bold{6}, (4), 64-71.
 #'
 #' @param x,q vector of positive quantiles.
 #' @param p vector of probabilities.
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
 #' @param theta positive parameter.
 #' @param alpha greater than -1.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
-#' @param mixture logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
+#' @param mixture logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.
 #'
 #' @return \code{dqlindley} gives the density, \code{pqlindley} gives the distribution function, \code{qqlindley} gives the quantile function, \code{rqlindley} generates random deviates and \code{hqlindley} gives the hazard rate function.
 #' @return Invalid arguments will return an error message.
 #
-#' @seealso  \code{\link[LambertW]{W}}.
+#' @seealso  \code{\link[lamW]{lambertWm1}}.
 #'
-#' @source [dpqh]qlindley are calculated directly from the definitions. \code{rqlindley} uses either a two-component mixture of gamma distributions or the inverse transform method.
+#' @source [d-h-p-q-r]qlindley are calculated directly from the definitions. \code{rqlindley} uses either a two-component mixture of gamma distributions or the quantile function.
 #'
 #' @details
 #' Probability density function
@@ -47,7 +47,7 @@
 #'
 #' \bold{Particular cases:} \eqn{\alpha = \theta} the one-parameter Lindley distribution and for \eqn{\alpha=0} the gamma distribution with shape = 2 and scale = \eqn{\theta}.
 #'
-#' @examples 
+#' @examples
 #' set.seed(1)
 #' x <- rqlindley(n = 1000, theta = 1.5, alpha = 1.5, mixture = TRUE)
 #' R <- range(x)
@@ -66,12 +66,11 @@
 #' fit <- fitdist(x, 'qlindley', start = list(theta = 1.5, alpha = 1.5))
 #' plot(fit)
 #'
-#'
 #' @rdname QLindley
 #' @export
 dqlindley <- function(x, theta, alpha, log = FALSE)
 {
-  stopifnot(theta > 0, alpha > 0)
+  stopifnot(theta > 0, alpha > -1)
   if(log)
   {
 	t1 <- log(theta)
@@ -92,49 +91,49 @@ dqlindley <- function(x, theta, alpha, log = FALSE)
 #' @export
 pqlindley <- function(q, theta, alpha, lower.tail = TRUE, log.p = FALSE)
 {
-  stopifnot(theta > 0, alpha > 0)
+  stopifnot(theta > 0, alpha > -1)
   if(lower.tail)
   {
-	t2 <- exp(-theta * q)
-	O  <- -(t2 * q * theta + t2 * alpha - alpha + t2 - 1) / (1 + alpha)
+	t2  <- exp(-theta * q)
+	cdf <- -(t2 * q * theta + t2 * alpha - alpha + t2 - 1) / (1 + alpha)
   }
   else
   {
-	t2 <- exp(-theta * q)
-	O  <- 1 + (t2 * q * theta + t2 * alpha - alpha + t2 - 1) / (1 + alpha)
+	t2  <- exp(-theta * q)
+	cdf <- 1 + (t2 * q * theta + t2 * alpha - alpha + t2 - 1) / (1 + alpha)
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 #' @rdname QLindley
 #' @export
 qqlindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE)
 {
-  stopifnot(theta > 0, alpha > 0)
+  stopifnot(theta > 0, alpha > -1)
   if(lower.tail)
   {
-	t1 <- 0.1e1 / theta
-	t3 <- 1 + alpha
-	t5 <- exp(-t3)
-	t7 <- W((p - 1) * t3 * t5, branch = -1)
-	O  <- -t1 * alpha - t1 * t7 - t1
+	t1  <- 0.1e1 / theta
+	t3  <- 1 + alpha
+	t5  <- exp(-t3)
+	t7  <- lambertWm1((p - 1) * t3 * t5)
+	qtf <- -t1 * alpha - t1 * t7 - t1
   }
   else
   {
-	t1 <- 0.1e1 / theta
-	t2 <- 1 + alpha
-	t4 <- exp(-t2)
-	t6 <- W(-p * t2 * t4, branch = -1)
-	O  <- -t1 * alpha - t1 * t6 - t1
+	t1  <- 0.1e1 / theta
+	t2  <- 1 + alpha
+	t4  <- exp(-t2)
+	t6  <- lambertWm1(-p * t2 * t4)
+	qtf <- -t1 * alpha - t1 * t6 - t1
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(qtf)) else return(qtf)
 }
 
 #' @rdname QLindley
 #' @export
 rqlindley <- function(n, theta, alpha, mixture = TRUE)
 {
-  stopifnot(theta > 0, alpha > 0)
+  stopifnot(theta > 0, alpha > -1)
   if(mixture)
   {
     p <- rbinom(n, size = 1, prob = alpha / (1 + alpha))
@@ -150,7 +149,7 @@ rqlindley <- function(n, theta, alpha, mixture = TRUE)
 #' @export
 hqlindley <- function(x, theta, alpha, log = FALSE)
 {
-  stopifnot(theta > 0, alpha > 0)
+  stopifnot(theta > 0, alpha > -1)
   if(log)
   {
 	t1 <- log(theta)
@@ -170,4 +169,3 @@ hqlindley <- function(x, theta, alpha, log = FALSE)
 	theta * (t1 + alpha) * t5 * t6 / (1 + (t6 * x * theta + t6 * alpha - alpha + t6 - 1) * t5)
   }
 }
-

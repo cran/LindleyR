@@ -1,11 +1,11 @@
-#' @importFrom LambertW W
+#' @importFrom lamW lambertWm1
 #'
 #' @name EXTPLindley
 #' @aliases EXTPLindley dextplindley pextplindley qextplindley rextplindley hextplindley
 #'
 #' @title Extended Power Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the extended power Lindley distribution with parameters theta, alpha and beta.
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the extended power Lindley distribution with parameters theta, alpha and beta.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
@@ -18,16 +18,16 @@
 #' @param p vector of probabilities.
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
 #' @param theta,alpha,beta positive parameters.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
-#' @param mixture logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
+#' @param mixture logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.
 #'
 #' @return \code{dextplindley} gives the density, \code{pextplindley} gives the distribution function, \code{qextplindley} gives the quantile function, \code{rextplindley} generates random deviates and \code{hextplindley} gives the hazard rate function.
 #' @return Invalid arguments will return an error message.
 #
-#' @seealso  \code{\link[LambertW]{W}}.
+#' @seealso  \code{\link[lamW]{lambertWm1}}.
 #'
-#' @source [dpqh]extplindley are calculated directly from the definitions. \code{rextplindley} uses either a two-component mixture of gamma distributions or the inverse transform method.
+#' @source [d-h-p-q-r]extplindley are calculated directly from the definitions. \code{rextplindley} uses either a two-component mixture of gamma distributions or the quantile function.
 #'
 #' @details
 #' Probability density function
@@ -37,7 +37,7 @@
 #' \deqn{F(x\mid \theta,\alpha,\beta )=1-\left( 1+{\frac{\beta \theta x^{\alpha }}{\theta +\beta }}\right) \ e^{-\theta x^{\alpha }}}
 #'
 #' Quantile function
-#' \deqn{Q(p\mid \theta ,\alpha ,\beta )={\left[ -\frac{1}{\theta }-\frac{1}{\beta }-{\frac{1}{\theta }}W_{-1}{\left( {\frac{\left( p-1\right) \left( \beta +\theta \right) }{\beta }}e{{^{-{\frac{\beta +\theta }{\beta }}}}}\right) }\right] }^{\frac{1}{\alpha }}}
+#' \deqn{Q(p\mid \theta ,\alpha ,\beta )={\left[ -\frac{1}{\theta }-\frac{1}{\beta }-{\frac{1}{\theta }}W_{-1}{\left( \frac{1}{\beta }\left( p-1\right) \left(  \beta +\theta \right) e{{^{-\left( {\frac{\beta +\theta }{\beta }}\right) }}}\right) }\right] }^{\frac{1}{\alpha }}}
 #'
 #' Hazard rate function
 #' \deqn{h(x\mid \theta ,\alpha ,\beta )={\frac{\alpha {\theta }^{2}\left( 1+\beta {x}^{\alpha }\right) {x}^{\alpha -1}}{\left( \beta +\theta \right) {\left(1+{\frac{\beta \theta {x}^{\alpha }}{\beta +\theta }}\right) }}}}
@@ -46,7 +46,7 @@
 #'
 #' \bold{Particular cases:} \eqn{\beta = 1} the power Lindley distribution, \eqn{\alpha = 1} the two-parameter Lindley distribution and \eqn{(\alpha = 1, \beta = 1)} the one-parameter Lindley distribution.
 #'
-#' @examples 
+#' @examples
 #' set.seed(1)
 #' x <- rextplindley(n = 1000, theta = 1.5, alpha = 1.5, beta = 1.5, mixture = TRUE)
 #' R <- range(x)
@@ -96,17 +96,17 @@ pextplindley <- function(q, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE
   stopifnot(theta > 0, alpha > 0, beta > 0)
   if(lower.tail)
   {
-	t4 <- q ^ alpha
-	t9 <- exp(-theta * t4)
-	O  <- 1 - (1 + beta * theta / (beta + theta) * t4) * t9
+	t4  <- q ^ alpha
+	t9  <- exp(-theta * t4)
+	cdf <- 1 - (1 + beta * theta / (beta + theta) * t4) * t9
   }
   else
   {
-	t4 <- q ^ alpha
-	t9 <- exp(-theta * t4)
-	O  <- (1 + beta * theta / (beta + theta) * t4) * t9
+	t4  <- q ^ alpha
+	t9  <- exp(-theta * t4)
+	cdf <- (1 + beta * theta / (beta + theta) * t4) * t9
  }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 #' @rdname EXTPLindley
@@ -121,9 +121,9 @@ qextplindley <- function(p, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE
 	t5 <- beta + theta
 	t7 <- 0.1e1 / beta
 	t9 <- exp(-t5 * t7)
-	t12 <- W((p - 1) * t5 * t7 * t9, branch = -1)
+	t12 <- lambertWm1((p - 1) * t5 * t7 * t9)
 	t16 <- ((-beta * t12 - beta - theta) * t7) ^ t1
-	O   <- 0.1e1 / t2 * t16
+	qtf <- 0.1e1 / t2 * t16
   }
   else
   {
@@ -132,11 +132,11 @@ qextplindley <- function(p, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE
 	t4 <- beta + theta
 	t6 <- 0.1e1 / beta
 	t8 <- exp(-t4 * t6)
-	t11 <- W(-p * t4 * t6 * t8, branch = -1)
+	t11 <- lambertWm1(-p * t4 * t6 * t8)
 	t15 <- ((-beta * t11 - beta - theta) * t6) ^ t1
-	O   <- 0.1e1 / t2 * t15
+	qtf <- 0.1e1 / t2 * t15
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(qtf)) else return(qtf)
 }
 
 #' @rdname EXTPLindley

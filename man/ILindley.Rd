@@ -9,7 +9,7 @@
 \alias{rilindley}
 \title{Inverse Lindley Distribution}
 \source{
-[dpqh]ilindley are calculated directly from the definitions. \code{rilindley} uses either a two-component mixture of inverse gamma distributions or the inverse transform method.
+[d-h-p-q-r]ilindley are calculated directly from the definitions. \code{rilindley} uses either a two-component mixture of inverse gamma distributions or the quantile function.
 }
 \usage{
 dilindley(x, theta, log = FALSE)
@@ -27,15 +27,15 @@ hilindley(x, theta, log = FALSE)
 
 \item{theta}{positive parameter.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of inverse-gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of inverse-gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dilindley} gives the density, \code{pilindley} gives the distribution function, \code{qilindley} gives the quantile function, \code{rilindley} generates random deviates and \code{hilindley} gives the hazard rate function.
@@ -43,7 +43,7 @@ hilindley(x, theta, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the inverse Lindley distribution with parameter theta.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the inverse Lindley distribution with parameter theta.
 }
 \details{
 Probability density function
@@ -53,7 +53,7 @@ Cumulative distribution function
 \deqn{F(x\mid \theta )=\left( 1+\frac{\theta }{x\left( 1+\theta \right) }\right) {e{^{-{\frac{\theta }{x}}}}}}
 
 Quantile function
-\deqn{Q\left( p\mid \theta \right) =-{\frac{\theta }{W\left(-p\left( 1+\theta \right) e{^{-1-\theta }}\right) +1+\theta }}}
+\deqn{Q(p\mid \theta) =-\left[ 1+\frac{1}{\theta }+\frac{1}{\theta }W_{-1}\left( -p\left( 1+\theta \right) e{^{-\left( 1+\theta \right) }} \right) \right] ^{-1}}
 
 Hazard rate function
 \deqn{h(x\mid \theta )=\frac{\theta ^{2}\left( 1+x\right) {e{^{-{\frac{\theta }{x}}}}}}{x^{3}\left( 1+\theta \right) \left[ 1-\left( 1+\frac{\theta }{x\left(1+\theta \right) }\right) {e{^{-{\frac{\theta }{x}}}}}\right] }}
@@ -61,12 +61,8 @@ Hazard rate function
 where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 }
 \examples{
-set.seed(1)
-x <- rilindley(n = 1000, theta = 0.5, mixture = TRUE)
-R <- range(x)
-S <- seq(from = R[1], to = R[2], by = 0.1)
-plot(S, dilindley(S, theta = 1.5), xlab = 'x', ylab = 'pdf', xlim = c(0, 5))
-hist(x, prob = TRUE, breaks = seq(0, R[2] + 1, 0.5), main = '', add = TRUE)
+x <- seq(from = 0.1, to = 3, by = 0.05)
+plot(x, dilindley(x, theta = 1.0), xlab = 'x', ylab = 'pdf')
 
 p <- seq(from = 0.1, to = 0.9, by = 0.1)
 q <- quantile(x, prob = p)
@@ -75,10 +71,11 @@ pilindley(q, theta = 1.5, lower.tail = FALSE)
 qilindley(p, theta = 1.5, lower.tail = TRUE)
 qilindley(p, theta = 1.5, lower.tail = FALSE)
 
+set.seed(1)
+x <- rilindley(n = 100, theta = 1.0)
 library(fitdistrplus)
-fit <- fitdist(x, 'ilindley', start = list(theta = 1.5), lower = c(0))
+fit <- fitdist(x, 'ilindley', start = list(theta = 1.0))
 plot(fit)
-
 
 }
 \author{
@@ -90,6 +87,6 @@ Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 Sharma, V. K., Singh, S. K., Singh, U., Agiwal, V., (2015). The inverse Lindley distribution: a stress-strength reliability model with application to head and neck cancer data. \emph{Journal of Industrial and Production Engineering}, \bold{32}, (3), 162-173.
 }
 \seealso{
-\code{\link[LambertW]{W}}, \code{\link[actuar]{rinvgamma}}.
+\code{\link[lamW]{lambertWm1}}, \code{\link[actuar]{rinvgamma}}.
 }
 

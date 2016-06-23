@@ -2,6 +2,7 @@
 % Please edit documentation in R/PLindley.R
 \name{PLindley}
 \alias{PLindley}
+\alias{carbonfibres}
 \alias{dplindley}
 \alias{hplindley}
 \alias{pplindley}
@@ -9,7 +10,7 @@
 \alias{rplindley}
 \title{Power Lindley Distribution}
 \source{
-[dpqh]plindley are calculated directly from the definitions. \code{rplindley} uses either a two-component mixture of gamma distributions or the inverse transform method.
+[d-h-p-q-r]plindley are calculated directly from the definitions. \code{rplindley} uses either a two-component mixture of gamma distributions or the quantile function.
 }
 \usage{
 dplindley(x, theta, alpha, log = FALSE)
@@ -27,15 +28,15 @@ hplindley(x, theta, alpha, log = FALSE)
 
 \item{theta, alpha}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dplindley} gives the density, \code{pplindley} gives the distribution function, \code{qplindley} gives the quantile function, \code{rplindley} generates random deviates and \code{hplindley} gives the hazard rate function.
@@ -43,20 +44,20 @@ hplindley(x, theta, alpha, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the power Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the power Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function
 \deqn{f(x\mid \theta,\alpha )={\frac{\alpha \theta ^{2}}{1 + \theta}}(1+x^{\alpha})\ x^{\alpha -1}\ e^{-\theta x^{\alpha }}}
 
 Cumulative distribution function
-\deqn{F(x\mid \theta,\alpha )=1-\left( 1+{\frac{\theta x^{\alpha }}{1 + \theta}}\right) \ e^{-\theta x^{\alpha }}}
+\deqn{F(x\mid \theta,\alpha )=1-\left( 1+{\frac{\theta }{1 + \theta}}x^{\alpha }\right) \ e^{-\theta x^{\alpha }}}
 
 Quantile function
-\deqn{Q(p\mid \theta,\alpha )=\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( \left( 1+\theta \right) \left(p-1\right) e^{-1-\theta }\right) \right) ^{-\frac{1}{\alpha }}}
+\deqn{Q(p\mid \theta,\alpha )=\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( \left( 1+\theta \right) \left(p-1\right) e^{-(1+\theta) }\right) \right) ^{\frac{1}{\alpha }}}
 
 Hazard rate function
-\deqn{h(x\mid\alpha,\beta )={\frac{\alpha \theta ^{2}(1+x^{\alpha })x^{\alpha-1}e^{-\theta x^{\alpha }}}{\left( \theta +1\right) \left( 1+{\frac{\theta x^{\alpha }}{1 + \theta}}\right) }}}
+\deqn{h(x\mid \theta ,\alpha )={\frac{\alpha \theta ^{2}(1+x^{\alpha })x^{\alpha-1}}{\left( \theta +1\right) \left( 1+{\frac{\theta }{\theta +1}}x^{\alpha }\right) }} }
 
 where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 
@@ -77,10 +78,11 @@ pplindley(q, theta = 1.5, alpha = 1.5, lower.tail = FALSE)
 qplindley(p, theta = 1.5, alpha = 1.5, lower.tail = TRUE)
 qplindley(p, theta = 1.5, alpha = 1.5, lower.tail = FALSE)
 
+## carbon fibers data (from Ghitany et al., 2013)
+data(carbonfibers)
 library(fitdistrplus)
-fit <- fitdist(x, 'plindley', start = list(theta = 1.5, alpha = 1.5))
+fit <- fitdist(carbonfibers, 'plindley', start = list(theta = 0.1, alpha = 0.1))
 plot(fit)
-
 
 }
 \author{
@@ -94,6 +96,6 @@ Ghitany, M. E., Al-Mutairi, D. K., Balakrishnan, N. and Al-Enezi, L. J., (2013).
 Mazucheli, J., Ghitany, M. E. and Louzada, F., (2013). Power Lindley distribution: Diferent methods of estimation and their applications to survival times data. \emph{Journal of Applied Statistical Science}, \bold{21}, (2), 135-144.
 }
 \seealso{
-\code{\link[LambertW]{W}}.
+\code{\link[lamW]{lambertWm1}}, \code{\link[LindleyR]{DPLindley}}.
 }
 

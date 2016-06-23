@@ -2,6 +2,7 @@
 % Please edit documentation in R/MOLindley.R
 \name{MOLindley}
 \alias{MOLindley}
+\alias{bladdercancer}
 \alias{dmolindley}
 \alias{hmolindley}
 \alias{pmolindley}
@@ -9,7 +10,7 @@
 \alias{rmolindley}
 \title{Marshall-Olkin Extended Lindley Distribution}
 \source{
-[dpqh]molindley are calculated directly from the definitions. \code{rmolindley} uses the inverse transform method.
+[d-h-p-q-r]molindley are calculated directly from the definitions. \code{rmolindley} uses the quantile function.
 }
 \usage{
 dmolindley(x, theta, alpha, log = FALSE)
@@ -27,9 +28,9 @@ hmolindley(x, theta, alpha, log = FALSE)
 
 \item{theta, alpha}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
@@ -41,22 +42,22 @@ hmolindley(x, theta, alpha, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the Marshall-Olkin extended Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the Marshall-Olkin extended Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function
-\deqn{f\left( x\mid \theta,\alpha \right) =\frac{\alpha \theta^{2}(1+x)e^{-\theta x}}{(1+\theta )\left[ 1-\overline{\alpha }\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}\right] ^{2}}}
+\deqn{f(x\mid \theta,\alpha) =\frac{\alpha \theta^{2}(1+x)e^{-\theta x}}{(1+\theta )\left[ 1-\overline{\alpha }\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}\right] ^{2}}}
 
 Cumulative distribution function
-\deqn{F\left( x\mid \theta,\alpha \right) =1-\frac{\alpha \left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}}{1-\overline{\alpha }\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}}}
+\deqn{F(x\mid \theta,\alpha) =1-\frac{\alpha \left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}}{1-\overline{\alpha }\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}}}
 
 Quantile function
 \deqn{Q(p\mid \theta,\alpha )=-1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( \frac{(\theta +1)}{e^{1 + \theta}}\frac{(p-1)}{\left( 1-\overline{\alpha }p\right) }\right)}
 
 Hazard rate function
-\deqn{h\left( x\mid \theta,\alpha \right) =\frac{\theta ^{2}\left( 1+x\right) }{\left( 1+\theta +\theta x\right) \left[ 1-\overline{\alpha }\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}\right] }}
+\deqn{h(x\mid \theta,\alpha) =\frac{\theta ^{2}\left( 1+x\right) }{\left( 1+\theta +\theta x\right) \left[ 1-\overline{\alpha }\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}\right] }}
 
-where \eqn{W_{-1}} denotes the negative branch of the Lambert W function and \eqn{\overline{\alpha}=(1 - \alpha)}.
+where \eqn{\overline{\alpha}=(1 - \alpha)} and \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 
 \bold{Particular case:} \eqn{\alpha=1} the one-parameter Lindley distribution.
 }
@@ -75,10 +76,11 @@ pmolindley(q, theta = 5, alpha = 5, lower.tail = FALSE)
 qmolindley(p, theta = 5, alpha = 5, lower.tail = TRUE)
 qmolindley(p, theta = 5, alpha = 5, lower.tail = FALSE)
 
+## bladder cancer data (from Warahena-Liyanage and Pararai, 2014)
+data(bladdercancer)
 library(fitdistrplus)
-fit <- fitdist(x, 'molindley', start = list(theta = 5, alpha = 5))
+fit <- fitdist(bladdercancer, 'molindley', start = list(theta = 0.1, alpha =  1.0))
 plot(fit)
-
 
 }
 \author{
@@ -91,9 +93,9 @@ do Espirito Santo, A. P. J., Mazucheli, J., (2015). Comparison of estimation met
 
 Ghitany, M. E., Al-Mutairi, D. K., Al-Awadhi, F. A. and Al-Burais, M. M., (2012). Marshall-Olkin extended Lindley distribution and its application. \emph{International Journal of Applied Mathematics}, \bold{25}, (5), 709-721.
 
-Marshall, A. W., Olkin, I. (1997). A new method for adding a parameter to a family of distributions with application to the exponential and Weibull families. \emph{Biometrika}, \bold{84}, 3, 641.652.
+Marshall, A. W., Olkin, I. (1997). A new method for adding a parameter to a family of distributions with application to the exponential and Weibull families. \emph{Biometrika}, \bold{84}, (3), 641.652.
 }
 \seealso{
-\code{\link[LambertW]{W}}, \code{\link[LindleyR]{Lindley}}.
+\code{\link[lamW]{lambertWm1}}, \code{\link[LindleyR]{Lindley}}.
 }
 

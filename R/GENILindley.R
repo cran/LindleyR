@@ -1,32 +1,38 @@
-#' @importFrom LambertW W
+#' @importFrom lamW lambertWm1
 #'
 #' @name GENILindley
 #' @aliases GENILindley dgenilindley pgenilindley qgenilindley rgenilindley hgenilindley
 #'
 #' @title Generalized Inverse Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the generalized inverse Lindley distribution with parameters theta and alpha.
+#' @note Barco et al. (2016) named the generalized inverse Lindley distribution as inverse power Lindley distribution.
+#'
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the generalized inverse Lindley distribution with parameters theta and alpha.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 #'
 #' @references
+#'
+#' Barco, K. V. P., Mazucheli, J. and Janeiro, V. (2016). The inverse power Lindley distribution. \emph{Communications in Statistics - Simulation and Computation}, (to appear).
+#'
 #' Sharma, V. K., Singh, S. K., Singh, U., Merovci, F., (2015). The generalized inverse Lindley distribution: A new inverse statistical model for the study of upside-down bathtub data. \emph{Communication in Statistics - Theory and Methods}, \bold{0}, 0, 0-0.
+#'
 #'
 #' @param x,q vector of positive quantiles.
 #' @param p vector of probabilities.
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
 #' @param theta,alpha positive parameters.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
-#' @param mixture logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
+#' @param mixture logical; If TRUE, (default), random deviates are generated from a two-component mixture of generalized inverse gamma distributions, otherwise from the quantile function.
 #'
 #' @return \code{dgenilindley} gives the density, \code{pgenilindley} gives the distribution function, \code{qgenilindley} gives the quantile function, \code{rgenilindley} generates random deviates and \code{hgenilindley} gives the hazard rate function.
 #' @return Invalid arguments will return an error message.
 #
-#' @seealso \code{\link[LambertW]{W}}.
+#' @seealso \code{\link[lamW]{lambertWm1}}.
 #'
-#' @source [dpqh]genilindley are calculated directly from the definitions. \code{rgenilindley} uses either a two-component mixture of the gamma distributions or the inverse transform method.
+#' @source [d-h-p-q-r]genilindley are calculated directly from the definitions. \code{rgenilindley} uses either a two-component mixture of generalized inverse gamma distributions or the quantile function.
 #'
 #' @details
 #' Probability density function
@@ -36,7 +42,7 @@
 #' \deqn{F(x\mid \theta,\alpha )=\left( 1+\frac{\theta }{\left( 1+\theta \right) {x}^{\alpha }}\right) e{{^{-{\frac{\theta }{x^{\alpha }}}}}}}
 #'
 #' Quantile function
-#' \deqn{Q\left( p\mid \theta ,\alpha \right) =\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W\left( -p\left( 1+\theta \right) e{^{-1-\theta }}\right) \right) ^{-  \frac{1}{\alpha }}}
+#' \deqn{Q(p\mid \theta ,\alpha) =\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( -p\left( 1+\theta \right) e{^{-(1+\theta) }}\right) \right) ^{-  \frac{1}{\alpha }}}
 #'
 #' Hazard rate function
 #' \deqn{h(x\mid \theta,\alpha )={\frac{\alpha {\theta }^{2}\left( 1+{x}^{\alpha}\right) e{{^{-{\frac{\theta }{{x}^{\alpha }}}}}}}{\left( 1+\theta \right) {x}^{2\alpha +1}\left[ 1-\left( 1+\frac{\theta }{\left( 1+\theta \right) {x}^{\alpha }}\right) e{{^{-{\frac{\theta }{x^{\alpha }}}}}}\right] }}}
@@ -45,23 +51,23 @@
 #'
 #' \bold{Particular case:} \eqn{\alpha = 1} the inverse Lindley distribution.
 #'
-#' @examples 
+#' @examples
 #' set.seed(1)
-#' x <- rgenilindley(n = 1000, theta = 10, alpha = 10, mixture = TRUE)
+#' x <- rgenilindley(n = 1000, theta = 10, alpha = 20, mixture = TRUE)
 #' R <- range(x)
-#' S <- seq(from = R[1], to = R[2], by = 0.1)
-#' plot(S, dgenilindley(S, theta = 10, alpha = 10), xlab = 'x', ylab = 'pdf')
+#' S <- seq(from = R[1], to = R[2], by = 0.01)
+#' plot(S, dgenilindley(S, theta = 10, alpha = 20), xlab = 'x', ylab = 'pdf')
 #' hist(x, prob = TRUE, main = '', add = TRUE)
 #'
 #' p <- seq(from = 0.1, to = 0.9, by = 0.1)
 #' q <- quantile(x, prob = p)
-#' pgenilindley(q, theta = 10, alpha = 10, lower.tail = TRUE)
-#' pgenilindley(q, theta = 10, alpha = 10, lower.tail = FALSE)
-#' qgenilindley(p, theta = 10, alpha = 10, lower.tail = TRUE)
-#' qgenilindley(p, theta = 10, alpha = 10, lower.tail = FALSE)
+#' pgenilindley(q, theta = 10, alpha = 20, lower.tail = TRUE)
+#' pgenilindley(q, theta = 10, alpha = 20, lower.tail = FALSE)
+#' qgenilindley(p, theta = 10, alpha = 20, lower.tail = TRUE)
+#' qgenilindley(p, theta = 10, alpha = 20, lower.tail = FALSE)
 #'
 #' library(fitdistrplus)
-#' fit <- fitdist(x, 'genilindley', start = list(theta = 10, alpha = 10))
+#' fit <- fitdist(x, 'genilindley', start = list(theta = 10, alpha = 20))
 #' plot(fit)
 #'
 #'
@@ -97,18 +103,18 @@ pgenilindley <- function(q, theta, alpha, lower.tail = TRUE, log.p = FALSE)
   stopifnot(theta > 0, alpha > 0)
   if(lower.tail)
   {
-    t3 <- q ^ (-alpha)
-    t4 <- theta * t3
-    t5 <- exp(-t4)
-    O<- 1 / (1 + theta) * t5 * (theta + 1 + t4)
+    t3  <- q ^ (-alpha)
+    t4  <- theta * t3
+    t5  <- exp(-t4)
+    cdf <- 1 / (1 + theta) * t5 * (theta + 1 + t4)
   }  else
   {
-    t3 <- q ^ (-alpha)
-    t4 <- theta * t3
-    t5 <- exp(-t4)
-    O <- 1 - 1 / (1 + theta) * t5 * (theta + 1 + t4)
+    t3  <- q ^ (-alpha)
+    t4  <- theta * t3
+    t5  <- exp(-t4)
+    cdf <- 1 - 1 / (1 + theta) * t5 * (theta + 1 + t4)
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 #' @rdname GENILindley
@@ -118,25 +124,25 @@ qgenilindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE)
   stopifnot(theta > 0, alpha > 0)
   if(lower.tail)
   {
-    t1 <- 0.1e1 / alpha
-    t2 <- theta ^ t1
-    t3 <- 1 + theta
-    t5 <- exp(-t3)
-    t7 <- W(-p * t3 * t5, branch = -1)
-    t9 <- (-t7 - 1 - theta) ^ t1
-    O<- t2 / t9
+    t1  <- 0.1e1 / alpha
+    t2  <- theta ^ t1
+    t3  <- 1 + theta
+    t5  <- exp(-t3)
+    t7  <- lambertWm1(-p * t3 * t5)
+    t9  <- (-t7 - 1 - theta) ^ t1
+    qtf <- t2 / t9
   }
   else
   {
-    t1 <- 0.1e1 / alpha
-    t2 <- theta ^ t1
-    t3 <- 1 + theta
-    t6 <- exp(-t3)
-    t8 <- W(t3 * (p - 1) * t6, branch = -1)
+    t1  <- 0.1e1 / alpha
+    t2  <- theta ^ t1
+    t3  <- 1 + theta
+    t6  <- exp(-t3)
+    t8  <- lambertWm1(t3 * (p - 1) * t6)
     t10 <- (-t8 - 1 - theta) ^ t1
-    O<- t2 / t10
+    qtf <- t2 / t10
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(qtf)) else return(qtf)
 }
 
 #' @rdname GENILindley
@@ -146,8 +152,8 @@ rgenilindley <- function(n, theta, alpha, mixture = TRUE)
   stopifnot(theta > 0, alpha > 0)
   if(mixture)
   {
-    p <- rbinom(n, size = 1, prob = theta / (1 + theta))
-    (p * rgamma(n, shape = 1, rate = theta) + (1 - p) * rgamma(n, shape = 2, rate = theta)) ^ (-1 / alpha)
+    x <- rbinom(n, size = 1, prob = theta / (1 + theta))
+    ((x * rgamma(n, shape = 1, scale = 1) + (1 - x) * rgamma(n, shape = 2, scale = 1)) / theta) ^ (-1 / alpha)
   }
   else
   {

@@ -7,9 +7,10 @@
 \alias{plindley}
 \alias{qlindley}
 \alias{rlindley}
+\alias{waitingtimes}
 \title{One-Parameter Lindley Distribution}
 \source{
-[dpqh]lindley are calculated directly from the definitions. \code{rlindley}  uses either a two-component mixture of the gamma distributions or the inverse transform method.
+[d-h-p-q-r]lindley are calculated directly from the definitions. \code{rlindley} uses either a two-component mixture of the gamma distributions or the quantile function.
 }
 \usage{
 dlindley(x, theta, log = FALSE)
@@ -27,15 +28,15 @@ hlindley(x, theta, log = FALSE)
 
 \item{theta}{positive parameter.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dlindley} gives the density, \code{plindley} gives the distribution function, \code{qlindley} gives the quantile function, \code{rlindley} generates random deviates and \code{hlindley} gives the hazard rate function.
@@ -43,17 +44,17 @@ hlindley(x, theta, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the one-parameter Lindley distribution with parameter theta.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the one-parameter Lindley distribution with parameter theta.
 }
 \details{
 Probability density function
 \deqn{f(x\mid \theta )=\frac{\theta ^{2}}{(1+\theta )}(1+x)e^{-\theta x}}
 
 Cumulative distribution function
-\deqn{F(x\mid \theta ) =1 - \frac{1+\theta +\theta x}{1+\theta }e^{-\theta x}}
+\deqn{F(x\mid \theta ) =1 - \left(1+ \frac{\theta x}{1+\theta }\right)e^{-\theta x}}
 
 Quantile function
-\deqn{Q(p\mid \theta )=-1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left((1+\theta)( p-1)e^{-1-\theta }\right)}
+\deqn{Q(p\mid \theta )=-1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left((1+\theta)( p-1)e^{-(1+\theta) }\right)}
 
 Hazard rate function
 \deqn{h(x\mid \theta )=\frac{\theta ^{2}}{1+\theta +\theta x}(1+x)}
@@ -75,8 +76,10 @@ plindley(q, theta = 1.5, lower.tail = FALSE)
 qlindley(p, theta = 1.5, lower.tail = TRUE)
 qlindley(p, theta = 1.5, lower.tail = FALSE)
 
+## waiting times data (from Ghitany et al., 2008)
+data(waitingtimes)
 library(fitdistrplus)
-fit <- fitdist(x, 'lindley', start = list(theta = 1.5), lower = c(0))
+fit <- fitdist(waitingtimes, 'lindley', start = list(theta = 0.1))
 plot(fit)
 
 
@@ -87,7 +90,7 @@ Josmar Mazucheli \email{jmazucheli@gmail.com}
 Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 }
 \references{
-Ghitany, M. E., Atieh, B., Nadarajah, S., (2008). Lindley distribution and its application. \emph{Mathematics and Computers in Simulation}, \bold{78}, 4, 49-506.
+Ghitany, M. E., Atieh, B., Nadarajah, S., (2008). Lindley distribution and its application. \emph{Mathematics and Computers in Simulation}, \bold{78}, (4), 49-506.
 
 Jodra, P., (2010). Computer generation of random variables with Lindley or Poisson-Lindley distribution via the Lambert W function. \emph{Mathematics and Computers in Simulation}, \bold{81}, (4), 851-859.
 
@@ -96,6 +99,6 @@ Lindley, D. V., (1958). Fiducial distributions and Bayes' theorem. \emph{Journal
 Lindley, D. V., (1965). \emph{Introduction to Probability and Statistics from a Bayesian View-point, Part II: Inference}. Cambridge University Press, New York.
 }
 \seealso{
-\code{\link[LambertW]{W}}, \code{\link[VGAM]{Lindley}}.
+\code{\link[lamW]{lambertWm1}}, \code{\link[LindleyR]{DLindley}}.
 }
 

@@ -25,7 +25,7 @@
 #' @return \code{randcensor} returns a list with the timedistr distribution, the censordistr distribution, the calculated parameter of the censordist distribution and n observations which is either the lifetime (delta = 1) or a censored lifetime (delta = 0).
 #' @return Invalid arguments will return an error message.
 #'
-#' @seealso \code{\link[stats]{Distributions}}, \code{\link[fitdistrplus]{fitdistcens}},  \code{\link[stats]{integrate}}, \code{\link[LindleyR]{Lindley}}, \code{\link[stats]{uniroot}}.
+#' @seealso \code{\link[stats]{Distributions}}, \code{\link[fitdistrplus]{fitdistcens}}, \code{\link[stats]{integrate}}, \code{\link[LindleyR]{Lindley}}, \code{\link[stats]{uniroot}}.
 #'
 #' @examples 
 #' x <- randcensor(n = 100, pcens = 0.2, timedistr = 'lindley', censordistr = 'lindley',

@@ -59,6 +59,6 @@ Lawless, J. F., (2003). \emph{Statistical models and methods for lifetime data, 
 Meeker, W. Q., Escobar, L. A., (1998). \emph{Statistical Methods for Reliability Data}. John Wiley and Sons, New York.
 }
 \seealso{
-\code{\link[stats]{Distributions}}, \code{\link[fitdistrplus]{fitdistcens}},  \code{\link[stats]{integrate}}, \code{\link[LindleyR]{Lindley}}, \code{\link[stats]{uniroot}}.
+\code{\link[stats]{Distributions}}, \code{\link[fitdistrplus]{fitdistcens}}, \code{\link[stats]{integrate}}, \code{\link[LindleyR]{Lindley}}, \code{\link[stats]{uniroot}}.
 }
 

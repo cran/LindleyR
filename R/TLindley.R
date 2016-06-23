@@ -3,7 +3,7 @@
 #'
 #' @title Transmuted Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the transmuted Lindley distribution with parameters theta and alpha.
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the transmuted Lindley distribution with parameters theta and alpha.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
@@ -19,8 +19,8 @@
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
 #' @param theta positive parameter.
 #' @param alpha \eqn{-1 \leq \alpha \leq +1}.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
 #' @param L,U interval which \code{uniroot} searches for a root (quantile), L = 1e-4 and U = 50 are the default values.
 #'
 #' @return \code{dtlindley} gives the density, \code{ptlindley} gives the distribution function, \code{qtlindley} gives the quantile function, \code{rtlindley} generates random deviates and \code{htlindley} gives the hazard rate function.
@@ -28,7 +28,7 @@
 #
 #' @seealso  \code{\link[stats]{uniroot}}.
 #'
-#' @source [dpqh]tlindley are calculated directly from the definitions. \code{rtlindley} uses the inverse transform method.
+#' @source [d-h-p-q-r]tlindley are calculated directly from the definitions. \code{rtlindley} uses the quantile function.
 #'
 #' @details
 #' Probability density function
@@ -45,7 +45,7 @@
 #'
 #' \bold{Particular case:} \eqn{\alpha = 0} the one-parameter Lindley distribution.
 #'
-#' @examples 
+#' @examples
 #' set.seed(1)
 #' x <- rtlindley(n = 1000, theta = 1.5, alpha = 0.5)
 #' R <- range(x)
@@ -102,7 +102,7 @@ ptlindley <- function(q, theta, alpha, lower.tail = TRUE, log.p = FALSE)
     t7  <- exp(-t2)
     t9  <- 1 - (1 + t2 / (1 + theta)) * t7
     t11 <- t9 ^ 2
-    O   <- (1 + alpha) * t9 - alpha * t11
+    cdf <- (1 + alpha) * t9 - alpha * t11
   }
   else
   {
@@ -110,9 +110,9 @@ ptlindley <- function(q, theta, alpha, lower.tail = TRUE, log.p = FALSE)
     t7  <- exp(-t2)
     t9  <- 1 - (1 + t2 / (1 + theta)) * t7
     t11 <- t9 ^ 2
-    O   <- 1 - (1 + alpha) * t9 + alpha * t11
+    cdf <- 1 - (1 + alpha) * t9 + alpha * t11
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 #' @rdname TLindley
@@ -126,8 +126,8 @@ qtlindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE, L = 1e-
     {
       tryCatch(uniroot(function(q) ptlindley(q, theta, alpha, lower.tail = TRUE, log.p = FALSE) - p, lower = L, upper = U)$root, error = function(e) NaN)
     }
-    O <- sapply(p, fx)
-    if(log.p) return(log(O)) else return(O)
+    qtf <- sapply(p, fx)
+    if(log.p) return(log(qtf)) else return(qtf)
   }
   else
   {
@@ -135,8 +135,8 @@ qtlindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE, L = 1e-
     {
       tryCatch(uniroot(function(q) ptlindley(q, theta, alpha, lower.tail = FALSE, log.p = FALSE) - p, lower = L, upper = U)$root, error = function(e) NaN)
     }
-    O <- sapply(p, fx)
-    if(log.p) return(log(O)) else return(O)
+    qtf <- sapply(p, fx)
+    if(log.p) return(log(qtf)) else return(qtf)
   }
 }
 

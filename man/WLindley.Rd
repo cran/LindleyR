@@ -2,6 +2,7 @@
 % Please edit documentation in R/WLindley.R
 \name{WLindley}
 \alias{WLindley}
+\alias{carbonfibers}
 \alias{dwlindley}
 \alias{hwlindley}
 \alias{pwlindley}
@@ -9,7 +10,7 @@
 \alias{rwlindley}
 \title{Weighted Lindley Distribution}
 \source{
-[dpqh]wlindley are calculated directly from the definitions. \code{rwlindley} uses either a two-component mixture of the gamma distributions or the inverse transform method.
+[d-h-p-q-r]wlindley are calculated directly from the definitions. \code{rwlindley} uses either a two-component mixture of the gamma distributions or the quantile function.
 }
 \usage{
 dwlindley(x, theta, alpha, log = FALSE)
@@ -28,9 +29,9 @@ hwlindley(x, theta, alpha, log = FALSE)
 
 \item{theta, alpha}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
@@ -38,7 +39,7 @@ hwlindley(x, theta, alpha, log = FALSE)
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dwlindley} gives the density, \code{pwlindley} gives the distribution function, \code{qwlindley} gives the quantile function, \code{rwlindley} generates random deviates and \code{hwlindley} gives the hazard rate function.
@@ -46,22 +47,22 @@ hwlindley(x, theta, alpha, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the weighted Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the weighted Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function
-\deqn{f\left( x\mid \theta,\alpha \right) =\frac{\theta ^{\alpha +1}}{\left( \theta+\alpha \right) \Gamma \left( \alpha \right) }x^{\alpha -1}\left( 1+x\right)e^{-\theta x}  \label{density-weighted-lindley}}
+\deqn{f( x\mid \theta,\alpha) =\frac{\theta ^{\alpha +1}}{\left( \theta+\alpha \right) \Gamma \left( \alpha \right) }x^{\alpha -1}\left( 1+x\right)e^{-\theta x}  \label{density-weighted-lindley}}
 
 Cumulative distribution function
-\deqn{F\left( x\mid \theta,\alpha \right) =1 - \frac{\left( \theta +\alpha \right)\Gamma \left( \alpha,\theta x\right) +\left( \theta t\right) ^{\alpha}e^{-\theta x}}{\left( \theta +\alpha \right) \Gamma \left( \alpha \right) }}
+\deqn{F(x\mid \theta,\alpha) =1 - \frac{\left( \theta +\alpha \right)\Gamma \left( \alpha,\theta x\right) +\left( \theta x\right) ^{\alpha}e^{-\theta x}}{\left( \theta +\alpha \right) \Gamma \left( \alpha \right) }}
 
 Quantile function
 \deqn{\code{does not have a closed mathematical expression}}
 
 Hazard rate function
-\deqn{h\left( x\mid \theta,\alpha \right) =\frac{\theta ^{\alpha +1}x^{\alpha-1}\left( 1+x\right) e^{-\theta x}}{\left( \theta +\alpha \right) \Gamma\left( \alpha,\theta x\right) +\left( \theta x\right) ^{\alpha }e^{-\theta x}}}
+\deqn{h(x\mid \theta,\alpha) =\frac{\theta ^{\alpha +1}x^{\alpha-1}\left( 1+x\right) e^{-\theta x}}{\left( \theta +\alpha \right) \Gamma\left( \alpha,\theta x\right) +\left( \theta x\right) ^{\alpha }e^{-\theta x}}}
 
-where \eqn{\Gamma \left( a,b\right)} is the lower incomplete gamma function.
+where \eqn{\Gamma \left(\alpha,\theta x\right) = \int_{\theta x}^{\infty}x^{\alpha -1}e^{-x}dx} is the upper incomplete gamma function.
 
 \bold{Particular case:} \eqn{\alpha=1} the one-parameter Lindley distribution.
 }
@@ -83,10 +84,11 @@ pwlindley(q, theta = 1.5, alpha = 1.5, lower.tail = FALSE)
 qwlindley(p, theta = 1.5, alpha = 1.5, lower.tail = TRUE)
 qwlindley(p, theta = 1.5, alpha = 1.5, lower.tail = FALSE)
 
+## carbon fibers data (from Ghitany et al., 2013)
+data(carbonfibers)
 library(fitdistrplus)
-fit <- fitdist(x, 'wlindley', start = list(theta = 1.5, alpha = 1.5))
+fit <- fitdist(carbonfibers, 'wlindley', start = list(theta = 0.1, alpha = 0.1))
 plot(fit)
-
 
 }
 \author{
@@ -99,11 +101,13 @@ Al-Mutairi, D. K., Ghitany, M. E., Kundu, D., (2015). Inferences on stress-stren
 
 Bashir, S., Rasul, M., (2015). Some properties of the weighted Lindley distribution. \emph{EPRA Internation Journal of Economic and Business Review}, \bold{3}, (8), 11-17.
 
-Ghitany, M. E., Alqallaf, F., Al-Mutairi, D. K. and Husain, H. A., (2011). A two-parameter weighted Lindley distribution and its applications to survival data. \emph{Mathematics and Computers in Simulation} \bold{81}, (6), 1190-1201.
+Ghitany, M. E., Alqallaf, F., Al-Mutairi, D. K. and Husain, H. A., (2011). A two-parameter weighted Lindley distribution and its applications to survival data. \emph{Mathematics and Computers in Simulation}, \bold{81}, (6), 1190-1201.
 
 Mazucheli, J., Louzada, F., Ghitany, M. E., (2013). Comparison of estimation methods for the parameters of the weighted Lindley distribution. \emph{Applied Mathematics and Computation}, \bold{220}, 463-471.
+
+Mazucheli, J., Coelho-Barros, E. A. and Achcar, J. (2016). An alternative reparametrization on the weighted Lindley distribution. \emph{Pesquisa Operacional}, (to appear).
 }
 \seealso{
-\code{\link[LambertW]{W}}, \code{\link[stats]{uniroot}}, \code{\link[zipfR]{Igamma}}.
+\code{\link[lamW]{lambertWm1}}, \code{\link[stats]{uniroot}}, \code{\link[LindleyR]{DWLindley}}.
 }
 

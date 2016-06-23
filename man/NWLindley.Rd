@@ -9,7 +9,7 @@
 \alias{rnwlindley}
 \title{New Weighted Lindley Distribution}
 \source{
-[dpqh]nwlindley are calculated directly from the definitions. \code{rnwlindley} uses the inverse transform method.
+[d-h-p-q-r]nwlindley are calculated directly from the definitions. \code{rnwlindley} uses the quantile function.
 }
 \usage{
 dnwlindley(x, theta, alpha, log = FALSE)
@@ -28,9 +28,9 @@ hnwlindley(x, theta, alpha, log = FALSE)
 
 \item{theta, alpha}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
@@ -44,7 +44,7 @@ hnwlindley(x, theta, alpha, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the new weighted Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the new weighted Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function
@@ -91,6 +91,6 @@ Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 Asgharzadeh, A., Bakouch, H. S., Nadarajah, S., Sharafi, F., (2016). A new weighted Lindley distribution with application. \emph{Brazilian Journal of Probability and Statistics}, \bold{30}, 1-27.
 }
 \seealso{
-\code{\link[LambertW]{W}}, \code{\link[stats]{uniroot}}.
+\code{\link[lamW]{lambertWm1}}, \code{\link[stats]{uniroot}}.
 }
 

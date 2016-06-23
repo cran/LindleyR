@@ -9,7 +9,7 @@
 \alias{rextlindley}
 \title{Extended Lindley Distribution}
 \source{
-[dpqh]extlindley are calculated directly from the definitions. \code{rextlindley} uses the inverse transform method.
+[d-h-p-q-r]extlindley are calculated directly from the definitions. \code{rextlindley} uses the quantile function.
 }
 \usage{
 dextlindley(x, theta, alpha, beta, log = FALSE)
@@ -26,11 +26,15 @@ hextlindley(x, theta, alpha, beta, log = TRUE)
 \arguments{
 \item{x, q}{vector of positive quantiles.}
 
-\item{theta, alpha, beta}{positive parameters.}
+\item{theta}{positive parameter.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{alpha}{\eqn{\rm I\!R^{-}\cup (0,1)}.}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{beta}{greater than or equal to zero.}
+
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
+
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
@@ -44,20 +48,20 @@ hextlindley(x, theta, alpha, beta, log = TRUE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the extended Lindley distribution with parameters theta, alpha and beta.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the extended Lindley distribution with parameters theta, alpha and beta.
 }
 \details{
 Probability density function
-\deqn{f(x\mid \theta,\alpha,\beta )=\frac{\left( 1+\theta +x\right) ^{\alpha -1}}{\left( 1+\theta \right) ^{\alpha }\left( 1+\theta +\theta x\right) }\left[  \beta \left( 1+\theta +\theta x\right) \theta ^{\beta }x^{\beta -1}-\alpha  \theta \right] e^{-\left( \theta x\right) ^{\beta }}}
+\deqn{f(x\mid \theta ,\alpha ,\beta )=\frac{\theta }{\left( 1+\theta \right) }\left( 1+\frac{\theta x}{1+\theta }\right) ^{\alpha -1}\left[ \beta \left(  1+\theta +\theta x\right) \left( \theta x\right) ^{\beta -1}-\alpha \right]e^{-\left( \theta x\right) ^{\beta }}}
 
 Cumulative distribution function
-\deqn{F(x\mid \theta, \alpha, \beta )=1-\left( \frac{1+\theta +\theta x}{1+\theta }\right)^{\alpha }e^{-\left( \theta x\right) ^{\beta }}}
+\deqn{F(x\mid \theta ,\alpha ,\beta )=1-\left( 1+\frac{\theta x}{1+\theta }\right)^{\alpha }e^{-\left( \theta x\right) ^{\beta }}}
 
 Quantile function
-\deqn{\code{does not have closed mathematical expression}}
+\deqn{\code{does not have a closed mathematical expression}}
 
 Hazard rate function
-\deqn{h(x\mid \theta, \alpha,\beta )=\frac{\beta \left( 1+\theta +\theta x\right) \theta ^{\beta}x^{\beta -1}-\alpha \theta }{\left( 1+\theta +\theta x\right) }}
+\deqn{h(x\mid \theta ,\alpha ,\beta )=\frac{\beta \left( 1+\theta +\theta x\right)\theta ^{\beta }x^{\beta -1}-\alpha \theta }{\left( 1+\theta +\theta x\right) }}
 
 \bold{Particular cases:} \eqn{(\alpha = 1, \beta = 1)} the one-parameter Lindley distribution, \eqn{(\alpha = 0, \beta = 1)} the exponential distribution and for \eqn{\alpha = 0} the Weibull distribution. See Bakouch et al. (2012) for other particular cases.
 }
@@ -66,21 +70,21 @@ The \code{\link[stats]{uniroot}} function with default arguments is used to find
 }
 \examples{
 set.seed(1)
-x <- rextlindley(n = 1000, theta = 1.5, alpha = 1.5, beta = 1.5)
+x <- rextlindley(n = 1000, theta = 5.0, alpha = -1.0, beta = 5.0)
 R <- range(x)
-S <- seq(from = R[1], to = R[2], by = 0.1)
-plot(S, dextlindley(S, theta = 1.5, alpha = 1.5, beta = 1.5), xlab = 'x', ylab = 'pdf')
+S <- seq(from = R[1], to = R[2], by = 0.01)
+plot(S, dextlindley(S, theta = 5.0, alpha = -1.0, beta = 5.0), xlab = 'x', ylab = 'pdf')
 hist(x, prob = TRUE, main = '', add = TRUE)
 
 p <- seq(from = 0.1, to = 0.9, by = 0.1)
 q <- quantile(x, prob = p)
-pextlindley(q, theta = 1.5, alpha = 1.5, beta = 1.5, lower.tail = TRUE)
-pextlindley(q, theta = 1.5, alpha = 1.5, beta = 1.5, lower.tail = FALSE)
-qextlindley(p, theta = 1.5, alpha = 1.5, beta = 1.5, lower.tail = TRUE)
-qextlindley(p, theta = 1.5, alpha = 1.5, beta = 1.5, lower.tail = FALSE)
+pextlindley(q, theta = 5.0, alpha = -1.0, beta = 5.0, lower.tail = TRUE)
+pextlindley(q, theta = 5.0, alpha = -1.0, beta = 5.0, lower.tail = FALSE)
+qextlindley(p, theta = 5.0, alpha = -1.0, beta = 5.0, lower.tail = TRUE)
+qextlindley(p, theta = 5.0, alpha = -1.0, beta = 5.0, lower.tail = FALSE)
 
 library(fitdistrplus)
-fit <- fitdist(x, 'extlindley', start = list(theta = 1.5, alpha = 1.5, beta = 1.5))
+fit <- fitdist(x, 'extlindley', start = list(theta = 5.0, alpha = -1.0, beta = 5.0))
 plot(fit)
 
 }
@@ -93,6 +97,6 @@ Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 Bakouch, H. S., Al-Zahrani, B. M., Al-Shomrani, A. A., Marchi, V. A. A., Louzada, F., (2012). An extended Lindley distribution. \emph{Journal of the Korean Statistical Society}, \bold{41}, (1), 75-85.
 }
 \seealso{
-\code{\link[LambertW]{W}}, \code{\link[stats]{uniroot}}.
+\code{\link[lamW]{lambertWm1}}, \code{\link[stats]{uniroot}}.
 }
 

@@ -9,7 +9,7 @@
 \alias{rextplindley}
 \title{Extended Power Lindley Distribution}
 \source{
-[dpqh]extplindley are calculated directly from the definitions. \code{rextplindley} uses either a two-component mixture of gamma distributions or the inverse transform method.
+[d-h-p-q-r]extplindley are calculated directly from the definitions. \code{rextplindley} uses either a two-component mixture of gamma distributions or the quantile function.
 }
 \usage{
 dextplindley(x, theta, alpha, beta, log = FALSE)
@@ -27,15 +27,15 @@ hextplindley(x, theta, alpha, beta, log = FALSE)
 
 \item{theta, alpha, beta}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dextplindley} gives the density, \code{pextplindley} gives the distribution function, \code{qextplindley} gives the quantile function, \code{rextplindley} generates random deviates and \code{hextplindley} gives the hazard rate function.
@@ -43,7 +43,7 @@ hextplindley(x, theta, alpha, beta, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the extended power Lindley distribution with parameters theta, alpha and beta.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the extended power Lindley distribution with parameters theta, alpha and beta.
 }
 \details{
 Probability density function
@@ -53,7 +53,7 @@ Cumulative distribution function
 \deqn{F(x\mid \theta,\alpha,\beta )=1-\left( 1+{\frac{\beta \theta x^{\alpha }}{\theta +\beta }}\right) \ e^{-\theta x^{\alpha }}}
 
 Quantile function
-\deqn{Q(p\mid \theta ,\alpha ,\beta )={\left[ -\frac{1}{\theta }-\frac{1}{\beta }-{\frac{1}{\theta }}W_{-1}{\left( {\frac{\left( p-1\right) \left( \beta +\theta \right) }{\beta }}e{{^{-{\frac{\beta +\theta }{\beta }}}}}\right) }\right] }^{\frac{1}{\alpha }}}
+\deqn{Q(p\mid \theta ,\alpha ,\beta )={\left[ -\frac{1}{\theta }-\frac{1}{\beta }-{\frac{1}{\theta }}W_{-1}{\left( \frac{1}{\beta }\left( p-1\right) \left(  \beta +\theta \right) e{{^{-\left( {\frac{\beta +\theta }{\beta }}\right) }}}\right) }\right] }^{\frac{1}{\alpha }}}
 
 Hazard rate function
 \deqn{h(x\mid \theta ,\alpha ,\beta )={\frac{\alpha {\theta }^{2}\left( 1+\beta {x}^{\alpha }\right) {x}^{\alpha -1}}{\left( \beta +\theta \right) {\left(1+{\frac{\beta \theta {x}^{\alpha }}{\beta +\theta }}\right) }}}}
@@ -91,6 +91,6 @@ Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 Alkarni, S. H., (2015). Extended power Lindley distribution: A new statistical model for non-monotone survival data. \emph{European Journal of Statistics and Probability}, \bold{3}, (3), 19-34.
 }
 \seealso{
-\code{\link[LambertW]{W}}.
+\code{\link[lamW]{lambertWm1}}.
 }
 

@@ -1,11 +1,13 @@
-#' @importFrom LambertW W
+#' @importFrom lamW lambertWm1
 #'
 #' @name EXPLindley
-#' @aliases EXPLindley dexplindley pexplindley qexplindley rexplindley hexplindley
+#' @aliases EXPLindley dexplindley pexplindley qexplindley rexplindley hexplindley relieftimes
 #'
 #' @title Exponentiated Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the exponentiated Lindley distribution with parameters theta and alpha.
+#' @note Nadarajah et al. (2011) named the exponentiated Lindley distribution as generalized Lindley distribution.
+#'
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the exponentiated Lindley distribution with parameters theta and alpha.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
@@ -17,15 +19,15 @@
 #' @param p vector of probabilities.
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
 #' @param theta,alpha positive parameters.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
 #'
 #' @return \code{dexplindley} gives the density, \code{pexplindley} gives the distribution function, \code{qexplindley} gives the quantile function, \code{rexplindley} generates random deviates and \code{hexplindley} gives the hazard rate function.
 #' @return Invalid arguments will return an error message.
 #
-#' @seealso \code{\link[LambertW]{W}}.
+#' @seealso \code{\link[lamW]{lambertWm1}}.
 #'
-#' @source [dpqh]explindley are calculated directly from the definitions. \code{rexplindley} uses the inverse transform method.
+#' @source [d-h-p-q-r]explindley are calculated directly from the definitions. \code{rexplindley} uses the quantile function.
 #'
 #' @details
 #' Probability density function
@@ -35,11 +37,10 @@
 #' \deqn{F(x\mid \theta,\alpha )=\left[ 1-\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}\right] ^{\alpha }}
 #'
 #' Quantile function
-#' \deqn{Q(p\mid \theta,\alpha )=-1-\frac{1}{\theta }-{\frac{1}{\theta }}W_{-1}{\left( \left( 1+\theta \right) \left( p^{-\alpha }-1\right) e{^{-1-\theta }}\right) }}
+#' \deqn{Q(p\mid \theta ,\alpha )=-1-\frac{1}{\theta }-{\frac{1}{\theta }}W_{-1}{\left( (p^{\frac{1}{\alpha }}-1)\left( 1+\theta \right) e{^{-\left( 1+\theta \right) }}\right) }}
 #'
 #' Hazard rate function
-#' \deqn{h(x\mid \theta,\alpha )={\frac{\alpha {\theta }^{2}\left( 1+x\right) {{e}^{-\theta x}}\left[ 1-\left( 1+{\frac{\theta ,}{1+\theta }}\right) e{^{-\theta x}}\right] ^{\alpha -1}}{\left( 1+\theta \right) \left\{ 1-\left[\left( 1-\left( 1+{\frac{\theta ,}{1+\theta }}\right) {{e}^{-\theta x}}\right) ^{\alpha }\right] \right\} }}}
-#'
+#' \deqn{h(x\mid \theta ,\alpha )={\frac{\alpha {\theta }^{2}\left( 1+x\right) {{e}^{-\theta x}}\left[ 1-\left( 1+{\frac{\theta x}{1+\theta }}\right) e{^{-\theta x}}\right] ^{\alpha -1}}{\left( 1+\theta \right) \left\{ 1-\left[ 1-\left( 1+\frac{\theta x}{1+\theta }\right) e^{-\theta x}\right] ^{\alpha}\right\} }}}
 #' where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 #'
 #' \bold{Particular case:} \eqn{\alpha = 1} the one-parameter Lindley distribution.
@@ -59,8 +60,10 @@
 #' qexplindley(p, theta = 1.5, alpha = 1.5, lower.tail = TRUE)
 #' qexplindley(p, theta = 1.5, alpha = 1.5, lower.tail = FALSE)
 #'
+#' ## Relief times data (from Nadarajah et al., 2011)
+#' data(relieftimes)
 #' library(fitdistrplus)
-#' fit <- fitdist(x, 'explindley', start = list(theta = 1.5, alpha = 1.5))
+#' fit <- fitdist(relieftimes, 'explindley', start = list(theta = 1.5, alpha = 1.5))
 #' plot(fit)
 #'
 #' @rdname EXPLindley
@@ -99,18 +102,18 @@ pexplindley <- function(q, theta, alpha, lower.tail = TRUE, log.p = FALSE)
   stopifnot(theta > 0, alpha > 0)
   if(lower.tail)
   {
-	t1 <- theta * q
-	t6 <- exp(-t1)
-	O  <- (1 - (1 + t1 / (1 + theta)) * t6) ^ alpha
+	t1  <- theta * q
+	t6  <- exp(-t1)
+	cdf <- (1 - (1 + t1 / (1 + theta)) * t6) ^ alpha
   }
   else
   {
-	t1 <- theta * q
-	t6 <- exp(-t1)
-	t9 <- (1 - t6 * (1 + 1 / (1 + theta) * t1)) ^ alpha
-	O  <- 1 - t9
+	t1  <- theta * q
+	t6  <- exp(-t1)
+	t9  <- (1 - t6 * (1 + 1 / (1 + theta) * t1)) ^ alpha
+  cdf <- 1 - t9
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 #' @rdname EXPLindley
@@ -124,8 +127,8 @@ qexplindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE)
 	t2  <- log(p)
 	t5  <- exp(0.1e1 / alpha * t2)
 	t8  <- exp(-t1)
-	t10 <- W(t8 * (t5 - 1) * t1, branch = -1)
-	O   <- -1 / theta * (t10 + 1 + theta)
+	t10 <- lambertWm1(t8 * (t5 - 1) * t1)
+	qtf <- -1 / theta * (t10 + 1 + theta)
   }
   else
   {
@@ -133,11 +136,11 @@ qexplindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE)
 	t3  <- log1p(-p)
 	t6  <- exp(0.1e1 / alpha * t3)
 	t9  <- exp(-t1)
-	t11 <- W(t9 * (t6 - 1) * t1, branch = -1)
+	t11 <- lambertWm1(t9 * (t6 - 1) * t1)
 	t13 <- exp(t11 + 1 + theta)
-	O   <- -1 / theta / t13 * (theta * t13 + theta * t6 + t13 + t6 - theta - 1)
+	qtf <- -1 / theta / t13 * (theta * t13 + theta * t6 + t13 + t6 - theta - 1)
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(qtf)) else return(qtf)
 }
 
 #' @rdname EXPLindley
@@ -152,7 +155,7 @@ rexplindley <- function(n, theta, alpha)
 #' @export
 hexplindley <- function(x, theta, alpha, log = FALSE)
 {
-  stopifnot(x > 0, theta > 0, alpha > 0)
+  stopifnot(theta > 0, alpha > 0)
   if(log)
   {
       t1 <- log(alpha)

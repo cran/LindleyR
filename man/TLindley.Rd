@@ -9,7 +9,7 @@
 \alias{rtlindley}
 \title{Transmuted Lindley Distribution}
 \source{
-[dpqh]tlindley are calculated directly from the definitions. \code{rtlindley} uses the inverse transform method.
+[d-h-p-q-r]tlindley are calculated directly from the definitions. \code{rtlindley} uses the quantile function.
 }
 \usage{
 dtlindley(x, theta, alpha, log = FALSE)
@@ -30,9 +30,9 @@ htlindley(x, theta, alpha, log = FALSE)
 
 \item{alpha}{\eqn{-1 \leq \alpha \leq +1}.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
@@ -46,7 +46,7 @@ htlindley(x, theta, alpha, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the transmuted Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the transmuted Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function

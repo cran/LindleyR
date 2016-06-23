@@ -9,7 +9,7 @@
 \alias{rslindley}
 \title{Two-Parameter Lindley Distribution}
 \source{
-[dpqh]slindley are calculated directly from the definitions. \code{rslindley} uses either a two-component mixture of the gamma distributions or the inverse transform method.
+[d-h-p-q-r]slindley are calculated directly from the definitions. \code{rslindley} uses either a two-component mixture of the gamma distributions or the quantile function.
 }
 \usage{
 dslindley(x, theta, alpha, log = FALSE)
@@ -25,17 +25,19 @@ hslindley(x, theta, alpha, log = FALSE)
 \arguments{
 \item{x, q}{vector of positive quantiles.}
 
-\item{theta, alpha}{positive parameter.}
+\item{theta}{positive parameter.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{alpha}{greater than -theta.}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
+
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dslindley} gives the density, \code{pslindley} gives the distribution function, \code{qslindley} gives the quantile function, \code{rslindley} generates random deviates and \code{hslindley} gives the hazard rate function.
@@ -43,22 +45,22 @@ hslindley(x, theta, alpha, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random generation and hazard rate function for the two-parameter Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the two-parameter Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function
 \deqn{f(x\mid \theta,\alpha )=\frac{{\theta }^{2}}{\theta +\alpha }\left(1+\alpha x\right) e^{-\theta x}}
 
 Cumulative distribution function
-\deqn{F(x\mid \theta,\alpha )=1-\frac{\left( \alpha +\theta \alpha +\alpha \theta x\right) }{\theta +\alpha }e^{-\theta x}}
+\deqn{F(x\mid \theta,\alpha )=1-\frac{\left( \theta + \alpha +\alpha \theta x\right) }{\theta +\alpha }e^{-\theta x}}
 
 Quantile function
-\deqn{Q(p\mid \theta,\alpha )=-\frac{1}{\theta }-\frac{1}{\alpha }-\frac{1}{\theta }W_{-1}\left( \frac{1}{\alpha }(p-1)\left( \theta +\alpha \right)e^{-\left( {\frac{\alpha +\theta }{\alpha }}\right) }\right)}
+\deqn{Q(p\mid \theta,\alpha )=-\frac{1}{\theta }-\frac{1}{\alpha }-\frac{1}{\theta }W_{-1}\left( \frac{1}{\alpha }(p-1)\left( \theta +\alpha \right)e^{-{\frac{\alpha +\theta }{\alpha }}}\right)}
 
 Hazard rate function
-\deqn{h(x\mid \theta )=\frac{\theta ^{2}}{\left( \alpha +\theta \alpha +\alpha\theta x\right) }(1+\alpha x)}
+\deqn{h(x\mid \theta )=\frac{\theta ^{2}}{\left( \theta + \alpha +\alpha\theta x\right) }(1+\alpha x)}
 
-where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
+where \eqn{\theta > 0}, \eqn{\alpha > -\theta} and \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 
 \bold{Particular case:} \eqn{\alpha = 1} the one-parameter Lindley distribution.
 }
@@ -81,7 +83,6 @@ library(fitdistrplus)
 fit <- fitdist(x, 'slindley', start = list(theta = 1.5, alpha = 1.5))
 plot(fit)
 
-
 }
 \author{
 Josmar Mazucheli \email{jmazucheli@gmail.com}
@@ -92,6 +93,6 @@ Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 Shanker, R., Sharma, S. and Shanker, R. (2013). A two-parameter Lindley distribution for modeling waiting and survival times data. \emph{Applied Mathematics}, \bold{4}, (2), 363-368.
 }
 \seealso{
-\code{\link[LambertW]{W}}.
+\code{\link[lamW]{lambertWm1}}.
 }
 

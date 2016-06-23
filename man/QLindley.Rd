@@ -9,7 +9,7 @@
 \alias{rqlindley}
 \title{Quasi Lindley Distribution}
 \source{
-[dpqh]qlindley are calculated directly from the definitions. \code{rqlindley} uses either a two-component mixture of gamma distributions or the inverse transform method.
+[d-h-p-q-r]qlindley are calculated directly from the definitions. \code{rqlindley} uses either a two-component mixture of gamma distributions or the quantile function.
 }
 \usage{
 dqlindley(x, theta, alpha, log = FALSE)
@@ -29,15 +29,15 @@ hqlindley(x, theta, alpha, log = FALSE)
 
 \item{alpha}{greater than -1.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dqlindley} gives the density, \code{pqlindley} gives the distribution function, \code{qqlindley} gives the quantile function, \code{rqlindley} generates random deviates and \code{hqlindley} gives the hazard rate function.
@@ -45,7 +45,7 @@ hqlindley(x, theta, alpha, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the quasi Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the quasi Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function
@@ -83,7 +83,6 @@ library(fitdistrplus)
 fit <- fitdist(x, 'qlindley', start = list(theta = 1.5, alpha = 1.5))
 plot(fit)
 
-
 }
 \author{
 Josmar Mazucheli \email{jmazucheli@gmail.com}
@@ -91,9 +90,9 @@ Josmar Mazucheli \email{jmazucheli@gmail.com}
 Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 }
 \references{
-Shanker, R. and Mishra, A. (2013). A quasi Lindley distribution. \emph{African Journal of Mathematics and Computer Science Research},  \bold{6}, (4), 64-71.
+Shanker, R. and Mishra, A. (2013). A quasi Lindley distribution. \emph{African Journal of Mathematics and Computer Science Research}, \bold{6}, (4), 64-71.
 }
 \seealso{
-\code{\link[LambertW]{W}}.
+\code{\link[lamW]{lambertWm1}}.
 }
 

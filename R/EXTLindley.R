@@ -3,7 +3,7 @@
 #'
 #' @title Extended Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the extended Lindley distribution with parameters theta, alpha and beta.
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the extended Lindley distribution with parameters theta, alpha and beta.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
@@ -17,50 +17,52 @@
 #' @param x,q vector of positive quantiles.
 #' @param p vector of probabilities.
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
-#' @param theta,alpha,beta positive parameters.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
+#' @param theta positive parameter.
+#' @param beta greater than or equal to zero.
+#' @param alpha \eqn{\rm I\!R^{-}\cup (0,1)}.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
 #' @param L,U interval which \code{uniroot} searches for a root (quantile), L = 1e-4 and U = 50 are the default values.
 #'
 #' @return \code{dextlindley} gives the density, \code{pextlindley} gives the distribution function, \code{qextlindley} gives the quantile function, \code{rextlindley} generates random deviates and \code{hextlindley} gives the hazard rate function.
 #' @return Invalid arguments will return an error message.
 #
-#' @seealso \code{\link[LambertW]{W}}, \code{\link[stats]{uniroot}}.
+#' @seealso \code{\link[lamW]{lambertWm1}}, \code{\link[stats]{uniroot}}.
 #'
-#' @source [dpqh]extlindley are calculated directly from the definitions. \code{rextlindley} uses the inverse transform method.
+#' @source [d-h-p-q-r]extlindley are calculated directly from the definitions. \code{rextlindley} uses the quantile function.
 #'
 #' @details
 #' Probability density function
-#' \deqn{f(x\mid \theta,\alpha,\beta )=\frac{\left( 1+\theta +x\right) ^{\alpha -1}}{\left( 1+\theta \right) ^{\alpha }\left( 1+\theta +\theta x\right) }\left[  \beta \left( 1+\theta +\theta x\right) \theta ^{\beta }x^{\beta -1}-\alpha  \theta \right] e^{-\left( \theta x\right) ^{\beta }}}
+#' \deqn{f(x\mid \theta ,\alpha ,\beta )=\frac{\theta }{\left( 1+\theta \right) }\left( 1+\frac{\theta x}{1+\theta }\right) ^{\alpha -1}\left[ \beta \left(  1+\theta +\theta x\right) \left( \theta x\right) ^{\beta -1}-\alpha \right]e^{-\left( \theta x\right) ^{\beta }}}
 #'
 #' Cumulative distribution function
-#' \deqn{F(x\mid \theta, \alpha, \beta )=1-\left( \frac{1+\theta +\theta x}{1+\theta }\right)^{\alpha }e^{-\left( \theta x\right) ^{\beta }}}
+#' \deqn{F(x\mid \theta ,\alpha ,\beta )=1-\left( 1+\frac{\theta x}{1+\theta }\right)^{\alpha }e^{-\left( \theta x\right) ^{\beta }}}
 #'
 #' Quantile function
-#' \deqn{\code{does not have closed mathematical expression}}
+#' \deqn{\code{does not have a closed mathematical expression}}
 #'
 #' Hazard rate function
-#' \deqn{h(x\mid \theta, \alpha,\beta )=\frac{\beta \left( 1+\theta +\theta x\right) \theta ^{\beta}x^{\beta -1}-\alpha \theta }{\left( 1+\theta +\theta x\right) }}
+#' \deqn{h(x\mid \theta ,\alpha ,\beta )=\frac{\beta \left( 1+\theta +\theta x\right)\theta ^{\beta }x^{\beta -1}-\alpha \theta }{\left( 1+\theta +\theta x\right) }}
 #'
 #' \bold{Particular cases:} \eqn{(\alpha = 1, \beta = 1)} the one-parameter Lindley distribution, \eqn{(\alpha = 0, \beta = 1)} the exponential distribution and for \eqn{\alpha = 0} the Weibull distribution. See Bakouch et al. (2012) for other particular cases.
 #'
-#' @examples 
+#' @examples
 #' set.seed(1)
-#' x <- rextlindley(n = 1000, theta = 1.5, alpha = 1.5, beta = 1.5)
+#' x <- rextlindley(n = 1000, theta = 5.0, alpha = -1.0, beta = 5.0)
 #' R <- range(x)
-#' S <- seq(from = R[1], to = R[2], by = 0.1)
-#' plot(S, dextlindley(S, theta = 1.5, alpha = 1.5, beta = 1.5), xlab = 'x', ylab = 'pdf')
+#' S <- seq(from = R[1], to = R[2], by = 0.01)
+#' plot(S, dextlindley(S, theta = 5.0, alpha = -1.0, beta = 5.0), xlab = 'x', ylab = 'pdf')
 #' hist(x, prob = TRUE, main = '', add = TRUE)
 #'
 #' p <- seq(from = 0.1, to = 0.9, by = 0.1)
 #' q <- quantile(x, prob = p)
-#' pextlindley(q, theta = 1.5, alpha = 1.5, beta = 1.5, lower.tail = TRUE)
-#' pextlindley(q, theta = 1.5, alpha = 1.5, beta = 1.5, lower.tail = FALSE)
-#' qextlindley(p, theta = 1.5, alpha = 1.5, beta = 1.5, lower.tail = TRUE)
-#' qextlindley(p, theta = 1.5, alpha = 1.5, beta = 1.5, lower.tail = FALSE)
+#' pextlindley(q, theta = 5.0, alpha = -1.0, beta = 5.0, lower.tail = TRUE)
+#' pextlindley(q, theta = 5.0, alpha = -1.0, beta = 5.0, lower.tail = FALSE)
+#' qextlindley(p, theta = 5.0, alpha = -1.0, beta = 5.0, lower.tail = TRUE)
+#' qextlindley(p, theta = 5.0, alpha = -1.0, beta = 5.0, lower.tail = FALSE)
 #'
 #' library(fitdistrplus)
-#' fit <- fitdist(x, 'extlindley', start = list(theta = 1.5, alpha = 1.5, beta = 1.5))
+#' fit <- fitdist(x, 'extlindley', start = list(theta = 5.0, alpha = -1.0, beta = 5.0))
 #' plot(fit)
 #'
 #
@@ -68,7 +70,8 @@
 #' @export
 dextlindley <- function(x, theta, alpha, beta, log = FALSE)
 {
-  stopifnot(theta > 0, alpha > 0, beta > 0)
+  if(!((alpha == 1) || (alpha <= 0))) stop('alpha must be equal to 1 or less than or equal to 0')
+  stopifnot(theta > 0, beta >= 0)
   if(log)
   {
 	t3 <- log1p(x * theta + theta)
@@ -99,39 +102,40 @@ dextlindley <- function(x, theta, alpha, beta, log = FALSE)
 #' @export
 pextlindley <- function(q, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE)
 {
-  stopifnot(theta > 0, alpha > 0, beta > 0)
+  if(!((alpha == 1) || (alpha <= 0))) stop('alpha must be equal to 1 or less than or equal to 0')
+  stopifnot(theta > 0, beta >= 0)
   if(lower.tail)
   {
-	t1 <- theta * q
-	t6 <- ((t1 + theta + 1) / (1 + theta)) ^ alpha
-	t7 <- t1 ^ beta
-	t8 <- exp(-t7)
-	O<- -t6 * t8 + 1
+    t1 <- theta * q
+    t6 <- (1 + 1 / (1 + theta) * t1) ^ alpha
+    t7 <- t1 ^ beta
+    t8 <- exp(-t7)
+    cdf<- -t8 * t6 + 1
   }
   else
   {
-	t1 <- theta * q
-	t6 <- ((t1 + theta + 1) / (1 + theta)) ^ alpha
-	t7 <- t1 ^ beta
-	t8 <- exp(-t7)
-	O<- t6 * t8
+    t1 <- theta * q
+    t6 <- (1 + 1 / (1 + theta) * t1) ^ alpha
+    t7 <- t1 ^ beta
+    t8 <- exp(-t7)
+    cdf<- t8 * t6
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 #' @rdname EXTLindley
 #' @export
 qextlindley <- function(p, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE, L = 1e-4, U = 50)
 {
-  stopifnot(theta > 0, alpha > 0, beta > 0)
+  if(!((alpha == 1) || (alpha <= 0))) stop('alpha must be equal to 1 or less than or equal to 0')
+  stopifnot(theta > 0, beta >= 0)
   if(lower.tail)
   {
     fx <- function(p)
     {
       tryCatch(uniroot(function(q) pextlindley(q, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE) - p, lower = L, upper = U)$root, error = function(e) NaN)
     }
-    O <- sapply(p, fx)
-    if(log.p) return(log(O)) else return(O)
+    qtf <- sapply(p, fx)
   }
   else
   {
@@ -139,8 +143,8 @@ qextlindley <- function(p, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE,
     {
       tryCatch(uniroot(function(q) pextlindley(q, theta, alpha, beta, lower.tail = FALSE, log.p = FALSE) - p, lower = L, upper = U)$root, error = function(e) NaN)
     }
-    O <- sapply(p, fx)
-    if(log.p) return(log(O)) else return(O)
+    qtf <- sapply(p, fx)
+    if(log.p) return(log(qtf)) else return(qtf)
   }
 }
 
@@ -148,15 +152,13 @@ qextlindley <- function(p, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE,
 #' @export
 rextlindley <- function(n, theta, alpha, beta, L = 1e-4, U = 50)
 {
-  stopifnot(theta > 0, alpha > 0, beta > 0)
+  if(!((alpha == 1) || (alpha <= 0))) stop('alpha must be equal to 1 or less than or equal to 0')
+  stopifnot(theta > 0, beta >= 0)
   x  <- qextlindley(p = runif(n), theta, alpha, beta, lower.tail = TRUE, log.p = FALSE, L, U)
-  is <- is.na(x)
-  na <- any(is)
+  {is <- is.na(x);  na <- any(is)}
   if(na)
   {
-    y <- which(is)
-    i <- 1
-    l <- length(y)
+    {y <- which(is); i <- 1; l <- length(y)}
     while(i <= l)
     {
       x[y[i]] <- qextlindley(p = runif(1), theta, alpha, beta, lower.tail = TRUE, log.p = FALSE, L, U)
@@ -170,14 +172,15 @@ rextlindley <- function(n, theta, alpha, beta, L = 1e-4, U = 50)
 #' @export
 hextlindley <- function(x, theta, alpha, beta, log = TRUE)
 {
-  stopifnot(theta > 0, alpha > 0, beta > 0)
+  if(!((alpha == 1) || (alpha <= 0))) stop('alpha must be equal to 1 or less than or equal to 0')
+  stopifnot(theta > 0, beta >= 0)
   if(log)
   {
-    t1  <- x * theta
-    t3  <- log1p(t1 + theta)
-    t4  <- log(x)
-    t5  <- t1 ^ beta
-    t6  <- beta * t5
+    t1 <- x * theta
+    t3 <- log1p(t1 + theta)
+    t4 <- log(x)
+    t5 <- t1 ^ beta
+    t6 <- beta * t5
     t12 <- log(-alpha * theta * x + t1 * t6 + theta * t6 + t6)
     -t3 - t4 + t12
   }
@@ -189,6 +192,3 @@ hextlindley <- function(x, theta, alpha, beta, log = TRUE)
     1 / x / (t1 + theta + 1) * (-alpha * theta * x + t1 * t3 + theta * t3 + t3)
   }
 }
-
-
-

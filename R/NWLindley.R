@@ -1,11 +1,11 @@
-#' @importFrom LambertW W
+#' @importFrom lamW lambertWm1
 #'
 #' @name NWLindley
 #' @aliases NWLindley dnwlindley pnwlindley qnwlindley rnwlindley hnwlindley
 #'
 #' @title New Weighted Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the new weighted Lindley distribution with parameters theta and alpha.
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the new weighted Lindley distribution with parameters theta and alpha.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
@@ -19,16 +19,16 @@
 #' @param p vector of probabilities.
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
 #' @param theta,alpha positive parameters.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
 #' @param L,U interval which \code{uniroot} searches for a root (quantile), L = 1e-4 and U = 50 are the default values.
 #'
 #' @return \code{dnwlindley} gives the density, \code{pnwlindley} gives the distribution function, \code{qnwlindley} gives the quantile function, \code{rnwlindley} generates random deviates and \code{hnwlindley} gives the hazard rate function.
 #' @return Invalid arguments will return an error message.
 #
-#' @seealso \code{\link[LambertW]{W}}, \code{\link[stats]{uniroot}}.
+#' @seealso \code{\link[lamW]{lambertWm1}}, \code{\link[stats]{uniroot}}.
 #'
-#' @source [dpqh]nwlindley are calculated directly from the definitions. \code{rnwlindley} uses the inverse transform method.
+#' @source [d-h-p-q-r]nwlindley are calculated directly from the definitions. \code{rnwlindley} uses the quantile function.
 #'
 #' @details
 #' Probability density function
@@ -43,7 +43,7 @@
 #' Hazard rate function
 #' \deqn{h(x\mid \theta,\alpha )=\frac{{\theta }^{2}\left( 1+\alpha \right) ^{2}\left( 1+x\right) \left( 1-e{^{-\theta \alpha x}}\right) e{^{-\theta x}}}{\left( 1+\alpha \right) ^{2}\left( \theta x+\theta +1\right) e{^{-\theta x}-}\left( \theta \alpha x+\alpha \theta +\theta x+\theta +1\right) e{^{-\theta x}}e{^{-\theta \alpha x}}}}
 #'
-#' @examples 
+#' @examples
 #' set.seed(1)
 #' x <- rnwlindley(n = 1000, theta = 1.5, alpha = 1.5)
 #' R <- range(x)
@@ -110,7 +110,7 @@ pnwlindley <- function(q, theta, alpha, lower.tail = TRUE, log.p = FALSE)
 	t22 <- alpha * theta
 	t25 <- t3 * alpha * t5 - t12 * q * theta + t3 * q * theta + t7 * alpha - t12 * theta + t13 * theta + t17 * theta - 2 * alpha - t12 + t13 + 2 * t17 - 2 * t2 - 2 * t22 + t3 - t5 + t7 - theta - 1
 	t26 <- exp(-t5)
-	O   <- t25 * t26 / alpha / (t22 + alpha + theta + 2)
+	cdf <- t25 * t26 / alpha / (t22 + alpha + theta + 2)
   }
   else
   {
@@ -122,9 +122,9 @@ pnwlindley <- function(q, theta, alpha, lower.tail = TRUE, log.p = FALSE)
 	t16 <- alpha * theta
 	t19 <- t3 * alpha * t5 - t11 * q * theta + t3 * q * theta + t7 * alpha - t11 * theta - 2 * alpha - t11 - 2 * t16 - 2 * t2 + t3 - t5 + t7 - theta - 1
 	t20 <- exp(-t5)
-	O 	<- -t19 * t20 / alpha / (t16 + alpha + theta + 2)
+	cdf <- -t19 * t20 / alpha / (t16 + alpha + theta + 2)
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 
@@ -139,8 +139,8 @@ qnwlindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE, L = 1e
     {
       tryCatch(uniroot(function(q) pnwlindley(q, theta, alpha, lower.tail = TRUE, log.p = FALSE) - p, lower = L, upper = U)$root, error = function(e) NaN)
     }
-    O <- sapply(p, fx)
-    if(log.p) return(log(O)) else return(O)
+    qtf <- sapply(p, fx)
+    if(log.p) return(log(qtf)) else return(qtf)
   }
   else
   {
@@ -148,8 +148,8 @@ qnwlindley <- function(p, theta, alpha, lower.tail = TRUE, log.p = FALSE, L = 1e
     {
       tryCatch(uniroot(function(q) pnwlindley(q, theta, alpha, lower.tail = FALSE, log.p = FALSE) - p, lower = L, upper = U)$root, error = function(e) NaN)
     }
-    O <- sapply(p, fx)
-    if(log.p) return(log(O)) else return(O)
+    qtf <- sapply(p, fx)
+    if(log.p) return(log(qtf)) else return(qtf)
   }
 }
 
@@ -159,13 +159,10 @@ rnwlindley <- function(n, theta, alpha, L = 1e-4, U = 50)
 {
   stopifnot(theta > 0, alpha > 0)
   x  <- qnwlindley(p = runif(n), theta, alpha, lower.tail = TRUE, log.p = FALSE, L, U)
-  is <- is.na(x)
-  na <- any(is)
+  {is <- is.na(x); na <- any(is)}
   if(na)
   {
-    y <- which(is)
-    i <- 1
-    l <- length(y)
+    {y <- which(is); i <- 1; l <- length(y)}
     while(i <= l)
     {
       x[y[i]] <- qnwlindley(p = runif(1), theta, alpha, lower.tail = TRUE, log.p = FALSE, L, U)

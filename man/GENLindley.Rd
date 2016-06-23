@@ -9,7 +9,7 @@
 \alias{rgenlindley}
 \title{Generalized Lindley Distribution}
 \source{
-[dpqh]genlindley are calculated directly from the definitions. \code{rgenlindley} uses either a two-component mixture of the gamma distributions or the inverse transform method.
+[d-h-p-q-r]genlindley are calculated directly from the definitions. \code{rgenlindley} uses either a two-component mixture of the gamma distributions or the quantile function.
 }
 \usage{
 dgenlindley(x, theta, alpha, beta, log = FALSE)
@@ -28,9 +28,9 @@ hgenlindley(x, theta, alpha, beta, log = FALSE)
 
 \item{theta, alpha, beta}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
@@ -38,7 +38,7 @@ hgenlindley(x, theta, alpha, beta, log = FALSE)
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dgenlindley} gives the density, \code{pgenlindley} gives the distribution function, \code{qgenlindley} gives the quantile function, \code{rgenlindley} generates random deviates and \code{hgenlindley} gives the hazard rate function.
@@ -46,11 +46,11 @@ hgenlindley(x, theta, alpha, beta, log = FALSE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the generalized Lindley distribution with parameters theta, alpha and beta.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the generalized Lindley distribution with parameters theta, alpha and beta.
 }
 \details{
 Probability density function
-\deqn{f\left( x\mid \theta,\alpha,\beta \right) =\frac{\theta ^{\alpha +1}}{\left( \theta +\beta \right) \Gamma \left( \alpha +1\right) }x^{\alpha	-1}\left( \alpha +\beta x\right) e^{-\theta x}}
+\deqn{f( x\mid \theta,\alpha,\beta) =\frac{\theta ^{\alpha +1}}{\left( \theta +\beta \right) \Gamma \left( \alpha +1\right) }x^{\alpha	-1}\left( \alpha +\beta x\right) e^{-\theta x}}
 
 Cumulative distribution function
 \deqn{F(x\mid \theta,\alpha,\beta )=\sum_{j=0}^{1}\left\vert j-\frac{\theta }{\left( \theta +\beta \right) }\right\vert \frac{\Gamma \left( \alpha -j,\theta x\right) }{\Gamma \left( \alpha -j\right) }}%
@@ -63,7 +63,7 @@ Hazard rate function
 
 where \eqn{\Gamma \left( a,b\right)} is the lower incomplete gamma function.
 
-\bold{Particular cases:} \eqn{(\theta=1,\alpha=1)} the one-parameter Lindley distribution, \eqn{\alpha=1} the two-parameter Lindley distribution, \eqn{(\alpha=1,\beta=0)} the exponential distribution, \eqn{\beta = 0} the gamma distribution and for \eqn{\beta=\alpha} the weighted Lindley distribution.
+\bold{Particular cases:} \eqn{(\alpha=1, \beta = 1)} the one-parameter Lindley distribution, \eqn{\alpha=1} the two-parameter Lindley distribution, \eqn{(\alpha=1,\beta=0)} the exponential distribution, \eqn{\beta = 0} the gamma distribution and for \eqn{\beta=\alpha} the weighted Lindley distribution.
 }
 \note{
 The \code{\link[stats]{uniroot}} function with default arguments is used to find out the quantiles.
@@ -94,9 +94,9 @@ Josmar Mazucheli \email{jmazucheli@gmail.com}
 Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 }
 \references{
-Asgharzadeh, A., Bakouch, H. S., Nadarajah, S., Sharafi, F., (2016). A new weighted Lindley distribution with application. \emph{Brazilian Journal of Probability and Statistics}, \bold{30}, 1-27.
+Zakerzadeh, H., Dolati, A., (2009). Generalized Lindley distribution. \emph{Journal of Mathematical Extension}, \bold{3}, (2), 13–25.
 }
 \seealso{
-\code{\link[LambertW]{W}}, \code{\link[stats]{uniroot}}.
+\code{\link[lamW]{lambertWm1}}, \code{\link[stats]{uniroot}}.
 }
 

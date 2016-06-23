@@ -9,7 +9,7 @@
 \alias{rgenilindley}
 \title{Generalized Inverse Lindley Distribution}
 \source{
-[dpqh]genilindley are calculated directly from the definitions. \code{rgenilindley} uses either a two-component mixture of the gamma distributions or the inverse transform method.
+[d-h-p-q-r]genilindley are calculated directly from the definitions. \code{rgenilindley} uses either a two-component mixture of generalized inverse gamma distributions or the quantile function.
 }
 \usage{
 dgenilindley(x, theta, alpha, log = FALSE)
@@ -27,15 +27,15 @@ hgenilindley(x, theta, alpha, log = TRUE)
 
 \item{theta, alpha}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of generalized inverse gamma distributions, otherwise from the quantile function.}
 }
 \value{
 \code{dgenilindley} gives the density, \code{pgenilindley} gives the distribution function, \code{qgenilindley} gives the quantile function, \code{rgenilindley} generates random deviates and \code{hgenilindley} gives the hazard rate function.
@@ -43,7 +43,7 @@ hgenilindley(x, theta, alpha, log = TRUE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the generalized inverse Lindley distribution with parameters theta and alpha.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the generalized inverse Lindley distribution with parameters theta and alpha.
 }
 \details{
 Probability density function
@@ -53,7 +53,7 @@ Cumulative distribution function
 \deqn{F(x\mid \theta,\alpha )=\left( 1+\frac{\theta }{\left( 1+\theta \right) {x}^{\alpha }}\right) e{{^{-{\frac{\theta }{x^{\alpha }}}}}}}
 
 Quantile function
-\deqn{Q\left( p\mid \theta ,\alpha \right) =\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W\left( -p\left( 1+\theta \right) e{^{-1-\theta }}\right) \right) ^{-  \frac{1}{\alpha }}}
+\deqn{Q(p\mid \theta ,\alpha) =\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( -p\left( 1+\theta \right) e{^{-(1+\theta) }}\right) \right) ^{-  \frac{1}{\alpha }}}
 
 Hazard rate function
 \deqn{h(x\mid \theta,\alpha )={\frac{\alpha {\theta }^{2}\left( 1+{x}^{\alpha}\right) e{{^{-{\frac{\theta }{{x}^{\alpha }}}}}}}{\left( 1+\theta \right) {x}^{2\alpha +1}\left[ 1-\left( 1+\frac{\theta }{\left( 1+\theta \right) {x}^{\alpha }}\right) e{{^{-{\frac{\theta }{x^{\alpha }}}}}}\right] }}}
@@ -62,23 +62,26 @@ where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 
 \bold{Particular case:} \eqn{\alpha = 1} the inverse Lindley distribution.
 }
+\note{
+Barco et al. (2016) named the generalized inverse Lindley distribution as inverse power Lindley distribution.
+}
 \examples{
 set.seed(1)
-x <- rgenilindley(n = 1000, theta = 10, alpha = 10, mixture = TRUE)
+x <- rgenilindley(n = 1000, theta = 10, alpha = 20, mixture = TRUE)
 R <- range(x)
-S <- seq(from = R[1], to = R[2], by = 0.1)
-plot(S, dgenilindley(S, theta = 10, alpha = 10), xlab = 'x', ylab = 'pdf')
+S <- seq(from = R[1], to = R[2], by = 0.01)
+plot(S, dgenilindley(S, theta = 10, alpha = 20), xlab = 'x', ylab = 'pdf')
 hist(x, prob = TRUE, main = '', add = TRUE)
 
 p <- seq(from = 0.1, to = 0.9, by = 0.1)
 q <- quantile(x, prob = p)
-pgenilindley(q, theta = 10, alpha = 10, lower.tail = TRUE)
-pgenilindley(q, theta = 10, alpha = 10, lower.tail = FALSE)
-qgenilindley(p, theta = 10, alpha = 10, lower.tail = TRUE)
-qgenilindley(p, theta = 10, alpha = 10, lower.tail = FALSE)
+pgenilindley(q, theta = 10, alpha = 20, lower.tail = TRUE)
+pgenilindley(q, theta = 10, alpha = 20, lower.tail = FALSE)
+qgenilindley(p, theta = 10, alpha = 20, lower.tail = TRUE)
+qgenilindley(p, theta = 10, alpha = 20, lower.tail = FALSE)
 
 library(fitdistrplus)
-fit <- fitdist(x, 'genilindley', start = list(theta = 10, alpha = 10))
+fit <- fitdist(x, 'genilindley', start = list(theta = 10, alpha = 20))
 plot(fit)
 
 
@@ -89,9 +92,11 @@ Josmar Mazucheli \email{jmazucheli@gmail.com}
 Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 }
 \references{
+Barco, K. V. P., Mazucheli, J. and Janeiro, V. (2016). The inverse power Lindley distribution. \emph{Communications in Statistics - Simulation and Computation}, (to appear).
+
 Sharma, V. K., Singh, S. K., Singh, U., Merovci, F., (2015). The generalized inverse Lindley distribution: A new inverse statistical model for the study of upside-down bathtub data. \emph{Communication in Statistics - Theory and Methods}, \bold{0}, 0, 0-0.
 }
 \seealso{
-\code{\link[LambertW]{W}}.
+\code{\link[lamW]{lambertWm1}}.
 }
 

@@ -9,7 +9,7 @@
 \alias{rextilindley}
 \title{Extended Inverse Lindley Distribution}
 \source{
-[dpqh]extilindley are calculated directly from the definitions. \code{rextilindley} uses either a two-component mixture of the inverse generalized gamma distributions or the inverse transform method.
+[d-h-p-q-r]extilindley are calculated directly from the definitions. \code{rextilindley} uses either a two-component mixture of generalized inverse gamma distributions or the quantile function.
 }
 \usage{
 dextilindley(x, theta, alpha, beta, log = FALSE)
@@ -27,15 +27,16 @@ hextilindley(x, theta, alpha, beta, log = TRUE)
 
 \item{theta, alpha, beta}{positive parameters.}
 
-\item{log, log.p}{logical. If TRUE, probabilities p are given as log(p).}
+\item{log, log.p}{logical; If TRUE, probabilities p are given as log(p).}
 
-\item{lower.tail}{logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
+\item{lower.tail}{logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.}
 
 \item{p}{vector of probabilities.}
 
 \item{n}{number of observations. If \code{length(n) > 1}, the length is taken to be the number required.}
 
-\item{mixture}{logical. If TRUE (default), random values are generated from a two-component mixture of inverse generalized gamma distributions, otherwise from the quantile function.}
+\item{mixture}{logical; If TRUE, (default), random deviates are generated from a two-component mixture of inverse-gamma distributions, otherwise from the quantile function.
+#'}
 }
 \value{
 \code{dextilindley} gives the density, \code{pextilindley} gives the distribution function, \code{qextilindley} gives the quantile function, \code{rextilindley} generates random deviates and \code{hextilindley} gives the hazard rate function.
@@ -43,42 +44,43 @@ hextilindley(x, theta, alpha, beta, log = TRUE)
 Invalid arguments will return an error message.
 }
 \description{
-Density function, distribution function, quantile function, random numbers generation and hazard rate function for the extended inverse Lindley distribution with parameters theta, alpha and beta.
+Density function, distribution function, quantile function, random number generation and hazard rate function for the extended inverse Lindley distribution with parameters theta, alpha and beta.
 }
 \details{
 Probability density function
-\deqn{f(x\mid \theta,\alpha,\beta )=\frac{\alpha \theta ^{2}}{\theta +\beta }\left( \frac{\beta +x^{\alpha }}{x^{2\alpha +1}}\right) e^{-\frac{\theta }{x^{\alpha }}}}
+\deqn{f(x\mid \theta ,\alpha ,\beta )=\frac{\beta \theta ^{2}}{\theta +\alpha }\left( \frac{\alpha +x^{\beta }}{x^{2\beta +1}}\right) e^{-\frac{\theta }{  x^{\beta }}}}
 
 Cumulative distribution function
-\deqn{F(x\mid \theta,\alpha,\beta )=\left( 1+\frac{\theta \beta }{\left(\theta +\beta \right) {x}^{\alpha }}\right) e{{^{-{\frac{\theta }{x^{\alpha }}}}}}}
+\deqn{F(x\mid \theta ,\alpha ,\beta )=\left( 1+\frac{\theta \alpha }{\left( \theta +\alpha \right) }\frac{1}{{x}^{\beta }}\right) e{{^{-{\frac{\theta }{  x^{\beta }}}}}}}
 
 Quantile function
-\deqn{Q\left( p\mid \theta,\alpha,\beta \right)=\left[ -\frac{1}{\theta }-\frac{1}{\beta }-\frac{1}{\theta }W_{-1}{\left( -p{\frac{\left( \theta +\beta \right) }{\beta }e{^{-\left( {\frac{\theta +\beta }{\beta }}\right) }}}\right) }\right] ^{-\frac{1}{\alpha }}}
+\deqn{Q(p\mid \theta ,\alpha ,\beta) =\left[ -\frac{1}{\theta }-\frac{1}{\alpha }-\frac{1}{\theta }W_{-1}{\left( -\frac{p}{\alpha }\left( \theta+\alpha \right) {e{^{-\left( {\frac{\theta +\alpha }{\alpha }}\right) }}}\right) }\right] ^{-\frac{1}{\beta }}}
 
 Hazard rate function
-\deqn{h(x\mid \theta,\alpha,\beta )=\frac{\alpha \theta ^{2}\left( \beta+x^{\alpha }\right) e^{-\frac{\theta }{x^{\alpha }}}}{\left( \theta +\beta\right) x^{2\alpha +1}\left[ 1-\left( 1+\frac{\theta \beta }{\left( \theta+\beta \right) {x}^{\alpha }}\right) e{{^{-{\frac{\theta }{x^{\alpha }}}}}}\right] }}
+\deqn{h(x\mid \theta ,\alpha ,\beta )=\frac{\beta \theta ^{2}\left( \alpha+x^{\beta }\right) e^{-\frac{\theta }{x^{\beta }}}}{\left( \theta +\alpha\right) x^{2\beta +1}\left[ 1-\left( 1+\frac{\theta \alpha }{\left( \theta+\alpha \right) }\frac{1}{{x}^{\beta }}\right) e{{^{-{\frac{\theta }{x^{\beta }}}}}}\right] }}
 
 where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
+
+\bold{Particular cases:} \eqn{\alpha = 1, \beta = 1} the inverse Lindley distribution, \eqn{\alpha = 1} the generalized inverse Lindley distribution and for \eqn{\alpha = 0} the inverse Weibull distribution.
 }
 \examples{
 set.seed(1)
-x <- rextilindley(n = 1000, theta = 10, alpha = 10, beta = 10, mixture = TRUE)
+x <- rextilindley(n = 10000, theta = 5, alpha = 20, beta = 10)
 R <- range(x)
-S <- seq(from = R[1], to = R[2], by = 0.1)
-plot(S, dextilindley(S, theta = 10, alpha = 10, beta = 10), xlab = 'x', ylab = 'pdf')
-hist(x, prob = TRUE, main = '', breaks = seq(0, R[2] + 1, 0.1), add = TRUE)
+S <- seq(from = R[1], to = R[2], by = 0.01)
+plot(S, dextilindley(S, theta = 5, alpha = 20, beta = 20), xlab = 'x', ylab = 'pdf')
+hist(x, prob = TRUE, main = '', add = TRUE)
 
 p <- seq(from = 0.1, to = 0.9, by = 0.1)
 q <- quantile(x, prob = p)
-pextilindley(q, theta = 10, alpha = 10, beta = 10, lower.tail = TRUE)
-pextilindley(q, theta = 10, alpha = 10, beta = 10, lower.tail = FALSE)
-qextilindley(p, theta = 10, alpha = 10, beta = 10, lower.tail = TRUE)
-qextilindley(p, theta = 10, alpha = 10, beta = 10, lower.tail = FALSE)
+pextilindley(q, theta = 5, alpha = 20, beta = 10, lower.tail = TRUE)
+pextilindley(q, theta = 5, alpha = 20, beta = 10, lower.tail = FALSE)
+qextilindley(p, theta = 5, alpha = 20, beta = 10, lower.tail = TRUE)
+qextilindley(p, theta = 5, alpha = 20, beta = 10, lower.tail = FALSE)
 
 library(fitdistrplus)
-fit <- fitdist(x, 'extilindley', start = list(theta = 10, alpha = 10, beta = 10))
+fit <- fitdist(x, 'extilindley', start = list(theta = 5, alpha = 20, beta = 10))
 plot(fit)
-
 }
 \author{
 Josmar Mazucheli \email{jmazucheli@gmail.com}
@@ -87,8 +89,10 @@ Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
 }
 \references{
 Alkarni, S. H., (2015). Extended inverse Lindley distribution: properties and application. \emph{SpringerPlus}, \bold{4}, (1), 690-703.
+
+Mead, M. E., (2015). Generalized inverse gamma distribution and its application in reliability. \emph{Communication in Statistics - Theory and Methods}, \bold{44}, 1426-1435.
 }
 \seealso{
-\code{\link[LambertW]{W}}, \code{\link[VGAM]{gengamma.stacy}}.
+\code{\link[lamW]{lambertWm1}}.
 }
 

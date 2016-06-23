@@ -1,11 +1,13 @@
-#' @importFrom LambertW W
+#' @importFrom lamW lambertWm1
 #'
 #' @name EXPPLindley
 #' @aliases EXPPLindley dexpplindley pexpplindley qexpplindley rexpplindley hexpplindley
 #'
 #' @title Exponentiated Power Lindley Distribution
 #'
-#' @description Density function, distribution function, quantile function, random numbers generation and hazard rate function for the exponentiated power Lindley distribution with parameters theta, alpha and beta.
+#' @note Warahena-Liyanage and Pararai (2014) named the exponentiated power Lindley distribution as generalized power Lindley distribution.
+#'
+#' @description Density function, distribution function, quantile function, random number generation and hazard rate function for the exponentiated power Lindley distribution with parameters theta, alpha and beta.
 #'
 #' @author Josmar Mazucheli \email{jmazucheli@gmail.com}
 #' @author Larissa B. Fernandes \email{lbf.estatistica@gmail.com}
@@ -20,16 +22,15 @@
 #' @param p vector of probabilities.
 #' @param n number of observations. If \code{length(n) > 1}, the length is taken to be the number required.
 #' @param theta,alpha,beta positive parameters.
-#' @param log,log.p logical. If TRUE, probabilities p are given as log(p).
-#' @param lower.tail logical. If TRUE (default) \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
-#' @param mixture logical. If TRUE (default), random values are generated from a two-component mixture of gamma distributions, otherwise from the quantile function.
+#' @param log,log.p logical; If TRUE, probabilities p are given as log(p).
+#' @param lower.tail logical; If TRUE, (default), \eqn{P(X \leq x)} are returned, otherwise \eqn{P(X > x)}.
 #'
 #' @return \code{dexpplindley} gives the density, \code{pexpplindley} gives the distribution function, \code{qexpplindley} gives the quantile function, \code{rexpplindley} generates random deviates and \code{hexpplindley} gives the hazard rate function.
 #' @return Invalid arguments will return an error message.
 #
-#' @seealso  \code{\link[LambertW]{W}}.
+#' @seealso  \code{\link[lamW]{lambertWm1}}.
 #'
-#' @source [dpqh]expplindley are calculated directly from the definitions. \code{rexpplindley} uses either a two-component mixture of gamma distributions or the inverse transform method.
+#' @source [d-h-p-q-r]expplindley are calculated directly from the definitions. \code{rexpplindley} uses the quantile function.
 #'
 #' @details
 #' Probability density function
@@ -39,10 +40,10 @@
 #' \deqn{F(x\mid \theta,\alpha,\beta )=\left[ 1-\left( 1+{\frac{\theta x^{\alpha }}{1 + \theta}}\right) \ e^{-\theta x^{\alpha }}\right] ^{\beta }}
 #'
 #' Quantile function
-#' \deqn{Q(p\mid \theta,\alpha,\beta )=\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( \left( 1+\theta \right) \left( p^{-\beta }-1\right)e^{-1-\theta }\right) \right) ^{\frac{1}{\alpha }}}
+#' \deqn{Q(p\mid \theta ,\alpha ,\beta )=\left( -1-\frac{1}{\theta }-\frac{1}{\theta }W_{-1}\left( \left( 1+\theta \right) \left( p^{\frac{1}{\beta }}-1\right)e^{-\left( 1+\theta \right) }\right) \right) ^{\frac{1}{\alpha }}}
 #'
 #' Hazard rate function
-#' \deqn{h(x\mid\theta,\alpha,\beta )={\frac{\beta \alpha \theta ^{2}(1+x^{\alpha })x^{\alpha -1}e^{-\theta x^{\alpha }}\left[ 1-\left( 1+{\frac{\theta x^{\alpha }}{1 + \theta}}\right) e^{-\theta x^{\alpha }}\right] ^{\beta -1}}{\left( \theta +1\right) \left\{ 1-\left[ 1-\left( 1+{\frac{\theta x^{\alpha }}{1 + \theta}}\right) \ e^{-\theta x^{\alpha }}\right] ^{\beta }\right\} }}}
+#' \deqn{h(x\mid\theta,\alpha,\beta )={\frac{\beta \alpha \theta ^{2}(1+x^{\alpha })x^{\alpha -1}e^{-\theta x^{\alpha }}\left[ 1-\left( 1+{\frac{\theta x^{\alpha }}{\theta+1}}\right) e^{-\theta x^{\alpha }}\right] ^{\beta -1}}{\left( \theta +1\right) \left\{ 1-\left[ 1-\left( 1+{\frac{\theta x^{\alpha }}{1 + \theta}}\right) \ e^{-\theta x^{\alpha }}\right] ^{\beta }\right\} }}}
 #'
 #' where \eqn{W_{-1}} denotes the negative branch of the Lambert W function.
 #'
@@ -50,29 +51,31 @@
 #'
 #' @examples
 #' set.seed(1)
-#' x <- rexpplindley(n = 1000, theta = 1.5, alpha = 2.5, beta = 1.1, mixture = TRUE)
+#' x <- rexpplindley(n = 1000, theta = 11.0, alpha = 5.0, beta = 2.0)
 #' R <- range(x)
-#' S <- seq(from = R[1], to = R[2], by = 0.1)
-#' plot(S, dexpplindley(S, theta = 1.5, alpha = 2.5, beta = 1.1), xlab = 'x', ylab = 'pdf')
+#' S <- seq(from = R[1], to = R[2], by = 0.01)
+#' plot(S, dexpplindley(S, theta = 11.0, alpha = 5.0, beta = 2.0), xlab = 'x', ylab = 'pdf')
 #' hist(x, prob = TRUE, main = '', add = TRUE)
 #'
 #' p <- seq(from = 0.1, to = 0.9, by = 0.1)
 #' q <- quantile(x, prob = p)
-#' pexpplindley(q, theta = 1.5, alpha = 2.5, beta = 1.1, lower.tail = TRUE)
-#' pexpplindley(q, theta = 1.5, alpha = 2.5, beta = 1.1, lower.tail = FALSE)
-#' qexpplindley(p, theta = 1.5, alpha = 2.5, beta = 1.1, lower.tail = TRUE)
-#' qexpplindley(p, theta = 1.5, alpha = 2.5, beta = 1.1, lower.tail = FALSE)
+#' pexpplindley(q, theta = 11.0, alpha = 5.0, beta = 2.0, lower.tail = TRUE)
+#' pexpplindley(q, theta = 11.0, alpha = 5.0, beta = 2.0, lower.tail = FALSE)
+#' qexpplindley(p, theta = 11.0, alpha = 5.0, beta = 2.0, lower.tail = TRUE)
+#' qexpplindley(p, theta = 11.0, alpha = 5.0, beta = 2.0, lower.tail = FALSE)
 #'
+#' ## bladder cancer data (from Warahena-Liyanage and Pararai, 2014)
+#' data(bladdercancer)
 #' library(fitdistrplus)
-#' fit <- fitdist(x, 'expplindley', start = list(theta = 1.5, alpha = 2.5, beta = 1.1))
+#' fit <- fitdist(bladdercancer, 'expplindley', start = list(theta = 1, alpha =  1, beta = 1))
 #' plot(fit)
-#' 
+#'
 #'
 #' @rdname EXPPLindley
 #' @export
 dexpplindley <- function(x, theta, alpha, beta, log = FALSE)
 {
-  stopifnot(theta > 0, alpha > 0,  beta > 0)
+  stopifnot(theta > 0, alpha > 0, beta > 0)
   if(log)
   {
     t1 <- log(beta)
@@ -108,18 +111,18 @@ pexpplindley <- function(q, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE
   stopifnot(theta > 0, alpha > 0, beta > 0)
   if(lower.tail)
   {
-	t4 <- q ^ alpha
-	t8 <- exp(-t4 * theta)
-	O  <- (1 - t8 * (1 + t4 / (1 + theta) * theta)) ^ beta
+	t4  <- q ^ alpha
+	t8  <- exp(-t4 * theta)
+	cdf <- (1 - t8 * (1 + t4 / (1 + theta) * theta)) ^ beta
   }
   else
   {
 	t4  <- q ^ alpha
 	t8  <- exp(-t4 * theta)
 	t11 <- (1 - t8 * (1 + t4 / (1 + theta) * theta)) ^ beta
-	O   <- 1 - t11
+	cdf <- 1 - t11
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(cdf)) else return(cdf)
 }
 
 #' @rdname EXPPLindley
@@ -135,9 +138,9 @@ qexpplindley <- function(p, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE
 	t5  <- log(p)
 	t8  <- exp(0.1e1 / beta * t5)
 	t11 <- exp(-t4)
-	t13 <- W(t11 * (t8 - 1) * t4, branch = -1)
+	t13 <- lambertWm1(t11 * (t8 - 1) * t4)
 	t15 <- (-t13 - 1 - theta) ^ t1
-	O   <- t15 / t2
+	qtf <- t15 / t2
   }
   else
   {
@@ -147,30 +150,23 @@ qexpplindley <- function(p, theta, alpha, beta, lower.tail = TRUE, log.p = FALSE
 	t8  <- exp(0.1e1 / beta * t5)
 	t10 <- 1 + theta
 	t13 <- exp(-t10)
-	t15 <- W(t13 * (t8 - 1) * t10, branch = -1)
+	t15 <- lambertWm1(t13 * (t8 - 1) * t10)
 	t17 <- exp(t15 + 1 + theta)
 	t20 <- (-theta * t17 - theta * t8 - t17 - t8 + theta + 1) ^ t1
 	t23 <- exp(t15 * t1)
 	t25 <- exp(t1)
 	t29 <- exp(theta * t1)
-	O   <- 0.1e1 / t29 / t25 / t23 * t20 / t2
+	qtf <- 0.1e1 / t29 / t25 / t23 * t20 / t2
   }
-  if(log.p) return(log(O)) else return(O)
+  if(log.p) return(log(qtf)) else return(qtf)
 }
 
 #' @rdname EXPPLindley
 #' @export
-rexpplindley <- function(n, theta, alpha, beta, mixture = TRUE)
+rexpplindley <- function(n, theta, alpha, beta)
 {
   stopifnot(theta > 0, alpha > 0, beta > 0)
-  if(mixture)
-  {
-    rplindley(n, theta, alpha, mixture = TRUE) ^ (1 / beta)
-  }
-  else
-  {
-    rplindley(n, theta, alpha, mixture = FALSE) ^ (1 / beta)
-  }
+  qexpplindley(runif(n), theta, alpha, beta, lower.tail = TRUE)
 }
 
 #' @rdname EXPPLindley
